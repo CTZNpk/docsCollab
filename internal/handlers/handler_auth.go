@@ -11,6 +11,7 @@ import (
 )
 
 type UserResponse struct {
+	Id       string `json:"id"`
 	Email    string `json:"email"`
 	Username string `json:"username"`
 }
@@ -50,7 +51,7 @@ func LoginHandler(apiCfg *config.APIConfig) http.HandlerFunc {
 			return
 		}
 
-		token, err := services.GenerateJwtToken(creds.Email)
+		token, err := services.GenerateJwtToken(user.ID.String())
 		if err != nil {
 			http.Error(w, "Error Generating Token", http.StatusInternalServerError)
 			return
@@ -59,6 +60,7 @@ func LoginHandler(apiCfg *config.APIConfig) http.HandlerFunc {
 		response := RespondWithToken{
 			Token: token,
 			User: UserResponse{
+				Id:       user.ID.String(),
 				Username: user.Username,
 				Email:    user.Email,
 			},
@@ -112,7 +114,7 @@ func SignupHandler(apiCfg *config.APIConfig) http.HandlerFunc {
 			return
 		}
 
-		token, err := services.GenerateJwtToken(creds.Email)
+		token, err := services.GenerateJwtToken(user.ID.String())
 		log.Print(err)
 		if err != nil {
 			http.Error(w, "Error Generating Token", http.StatusInternalServerError)
@@ -122,6 +124,7 @@ func SignupHandler(apiCfg *config.APIConfig) http.HandlerFunc {
 		response := RespondWithToken{
 			Token: token,
 			User: UserResponse{
+				Id:       user.ID.String(),
 				Email:    user.Email,
 				Username: user.Username,
 			},

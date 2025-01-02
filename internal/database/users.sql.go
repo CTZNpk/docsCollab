@@ -48,10 +48,11 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (CreateU
 }
 
 const getUserFromEmail = `-- name: GetUserFromEmail :one
-SELECT username, email , password FROM users WHERE email= $1 LIMIT 1
+SELECT id, username, email , password FROM users WHERE email= $1 LIMIT 1
 `
 
 type GetUserFromEmailRow struct {
+	ID       uuid.UUID
 	Username string
 	Email    string
 	Password string
@@ -60,6 +61,11 @@ type GetUserFromEmailRow struct {
 func (q *Queries) GetUserFromEmail(ctx context.Context, email string) (GetUserFromEmailRow, error) {
 	row := q.db.QueryRowContext(ctx, getUserFromEmail, email)
 	var i GetUserFromEmailRow
-	err := row.Scan(&i.Username, &i.Email, &i.Password)
+	err := row.Scan(
+		&i.ID,
+		&i.Username,
+		&i.Email,
+		&i.Password,
+	)
 	return i, err
 }

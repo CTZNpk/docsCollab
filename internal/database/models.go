@@ -5,10 +5,82 @@
 package database
 
 import (
+	"database/sql"
+	"database/sql/driver"
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
 )
+
+type OperationType string
+
+const (
+	OperationTypeINSERT OperationType = "INSERT"
+	OperationTypeDELETE OperationType = "DELETE"
+	OperationTypeUPDATE OperationType = "UPDATE"
+)
+
+func (e *OperationType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = OperationType(s)
+	case string:
+		*e = OperationType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for OperationType: %T", src)
+	}
+	return nil
+}
+
+type NullOperationType struct {
+	OperationType OperationType
+	Valid         bool // Valid is true if OperationType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullOperationType) Scan(value interface{}) error {
+	if value == nil {
+		ns.OperationType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.OperationType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullOperationType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.OperationType), nil
+}
+
+type Document struct {
+	ID                    uuid.UUID
+	CreatedAt             time.Time
+	UpdatedAt             time.Time
+	Title                 string
+	NumberOfCollaborators int32
+	AuthorID              uuid.NullUUID
+}
+
+type Documentcollaborator struct {
+	ID             uuid.UUID
+	DocumentID     uuid.NullUUID
+	CollaboratorID uuid.NullUUID
+}
+
+type Operation struct {
+	ID            uuid.UUID
+	OperationType OperationType
+	DocumentID    uuid.NullUUID
+	OperationBy   uuid.NullUUID
+	Timestamp     sql.NullTime
+	Position      int32
+	Content       string
+	Length        int32
+}
 
 type User struct {
 	ID        uuid.UUID
