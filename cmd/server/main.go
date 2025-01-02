@@ -18,6 +18,9 @@ func main() {
 	router.Use(middlewares.Logger)
 
 	apiCfg := config.SetupDatabase()
+	router.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("Hello World with middlewares"))
+	})
 	router.Post("/signup", handlers.SignupHandler(&apiCfg))
 	router.Post("/login", handlers.LoginHandler(&apiCfg))
 

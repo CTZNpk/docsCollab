@@ -23,8 +23,8 @@ func (q *Queries) CheckIfUserExists(ctx context.Context, email string) (int32, e
 }
 
 const createUser = `-- name: CreateUser :one
-INSERT INTO users(username, email, password)
-VALUES ($1, $2, $3)
+INSERT INTO users(username, email, password ,created_at, updated_at)
+VALUES ($1, $2, $3, NOW(), NOW())
 RETURNING id, username, email
 `
 

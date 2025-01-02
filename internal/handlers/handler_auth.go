@@ -6,6 +6,7 @@ import (
 	"docsCollab/internal/services"
 	"docsCollab/internal/utils"
 	"encoding/json"
+	"log"
 	"net/http"
 )
 
@@ -29,6 +30,11 @@ func LoginHandler(apiCfg *config.APIConfig) http.HandlerFunc {
 
 		if err := json.NewDecoder(r.Body).Decode(&creds); err != nil {
 			http.Error(w, "Invalid request", http.StatusBadRequest)
+			return
+		}
+
+		if creds.Email == "" || creds.Password == "" {
+			http.Error(w, "Missing required fields", http.StatusBadRequest)
 			return
 		}
 
@@ -76,9 +82,13 @@ func SignupHandler(apiCfg *config.APIConfig) http.HandlerFunc {
 			return
 		}
 
-		//Check if the user Already Exists
-		userExist, err := apiCfg.DB.CheckIfUserExists(r.Context(), creds.Email)
-		if userExist == 0 {
+		if creds.Username == "" || creds.Email == "" || creds.Password == "" {
+			http.Error(w, "Missing required fields", http.StatusBadRequest)
+			return
+		}
+
+		userExists, err := apiCfg.DB.CheckIfUserExists(r.Context(), creds.Email)
+		if userExists == 1 {
 			http.Error(w, "User With this email already exists", http.StatusConflict)
 			return
 		}
@@ -103,6 +113,7 @@ func SignupHandler(apiCfg *config.APIConfig) http.HandlerFunc {
 		}
 
 		token, err := services.GenerateJwtToken(creds.Email)
+		log.Print(err)
 		if err != nil {
 			http.Error(w, "Error Generating Token", http.StatusInternalServerError)
 			return

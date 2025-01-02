@@ -1,5 +1,5 @@
 ###
-# r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+# router.Get("/", func(w http.ResponseWriter, r *http.Request) {
 #		w.Write([]byte("Hello World with middlewares"))
 #	})
 GET http://localhost:8000/
@@ -7,3 +7,25 @@ GET http://localhost:8000/
 
 
 ###
+#
+# router.Post("/signup", handlers.SignupHandler(&apiCfg))
+POST http://localhost:8000/signup
+accept: application/json
+content-type: application/json
+
+{
+  "username": "TestUser",
+  "email": "test12@gmail.com",
+  "password": "test123"
+}
+
+###
+# router.Post("/login", handlers.LoginHandler(&apiCfg))
+POST http://localhost:8000/login
+accept: application/json
+content-type: application/json
+
+{
+  "email": "test12@gmail.com",
+  "password": "test123"
+}

@@ -3,6 +3,7 @@ package config
 import (
 	"database/sql"
 	"docsCollab/internal/database"
+	_ "github.com/lib/pq"
 	"log"
 	"os"
 )
