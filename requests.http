@@ -1,0 +1,9 @@
+###
+# r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+#		w.Write([]byte("Hello World with middlewares"))
+#	})
+GET http://localhost:8000/
+
+
+
+###
