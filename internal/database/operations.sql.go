@@ -12,8 +12,8 @@ import (
 )
 
 const createOperation = `-- name: CreateOperation :one
-INSERT INTO Operations(operation_type, document_id, operation_by, position, content, length)
-VALUES ($1, $2, $3, $4, $5, $6)
+INSERT INTO Operations(operation_type, document_id, operation_by, position)
+VALUES ($1, $2, $3, $4)
 RETURNING 1
 `
 
@@ -22,8 +22,6 @@ type CreateOperationParams struct {
 	DocumentID    uuid.NullUUID
 	OperationBy   uuid.NullUUID
 	Position      int32
-	Content       string
-	Length        int32
 }
 
 func (q *Queries) CreateOperation(ctx context.Context, arg CreateOperationParams) (int32, error) {
@@ -32,8 +30,6 @@ func (q *Queries) CreateOperation(ctx context.Context, arg CreateOperationParams
 		arg.DocumentID,
 		arg.OperationBy,
 		arg.Position,
-		arg.Content,
-		arg.Length,
 	)
 	var column_1 int32
 	err := row.Scan(&column_1)

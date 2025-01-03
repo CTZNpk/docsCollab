@@ -62,6 +62,7 @@ type Document struct {
 	UpdatedAt             time.Time
 	Title                 string
 	NumberOfCollaborators int32
+	CurrentVersion        sql.NullInt32
 	AuthorID              uuid.NullUUID
 }
 
@@ -78,8 +79,6 @@ type Operation struct {
 	OperationBy   uuid.NullUUID
 	Timestamp     sql.NullTime
 	Position      int32
-	Content       string
-	Length        int32
 }
 
 type User struct {

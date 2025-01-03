@@ -51,3 +51,72 @@ func (q *Queries) CreateDocument(ctx context.Context, arg CreateDocumentParams) 
 	err := row.Scan(&i.ID, &i.Title)
 	return i, err
 }
+
+const getMyCollaborations = `-- name: GetMyCollaborations :many
+SELECT d.id , d.title
+FROM Documents d
+JOIN DocumentCollaborators dc ON d.id = dc.document_id
+WHERE dc.collaborator_id = $1
+`
+
+type GetMyCollaborationsRow struct {
+	ID    uuid.UUID
+	Title string
+}
+
+func (q *Queries) GetMyCollaborations(ctx context.Context, collaboratorID uuid.NullUUID) ([]GetMyCollaborationsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getMyCollaborations, collaboratorID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetMyCollaborationsRow
+	for rows.Next() {
+		var i GetMyCollaborationsRow
+		if err := rows.Scan(&i.ID, &i.Title); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMyDocuments = `-- name: GetMyDocuments :many
+SELECT id, title
+FROM Documents 
+WHERE author_id = $1
+`
+
+type GetMyDocumentsRow struct {
+	ID    uuid.UUID
+	Title string
+}
+
+func (q *Queries) GetMyDocuments(ctx context.Context, authorID uuid.NullUUID) ([]GetMyDocumentsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getMyDocuments, authorID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetMyDocumentsRow
+	for rows.Next() {
+		var i GetMyDocumentsRow
+		if err := rows.Scan(&i.ID, &i.Title); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

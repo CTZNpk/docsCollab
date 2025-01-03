@@ -25,7 +25,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 			http.Error(w, "Invalid or expired Token", http.StatusUnauthorized)
 			return
 		}
-		ctx := context.WithValue(r.Context(), UserContextKey, claims.Email)
+		ctx := context.WithValue(r.Context(), UserContextKey, claims.ID)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }

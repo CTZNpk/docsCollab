@@ -5,9 +5,7 @@ CREATE TABLE Operations(
   document_id UUID REFERENCES documents(id),
   operation_by UUID REFERENCES users(id),
   timestamp TIMESTAMP DEFAULT NOW(),
-  position INT NOT NULL,
-  content TEXT NOT NULL,
-  length INT NOT NULL
+  position INT NOT NULL
 );
 
 -- +goose Down
