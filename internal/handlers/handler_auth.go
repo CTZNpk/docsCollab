@@ -6,7 +6,6 @@ import (
 	"docsCollab/internal/services"
 	"docsCollab/internal/utils"
 	"encoding/json"
-	"log"
 	"net/http"
 )
 
@@ -115,7 +114,6 @@ func SignupHandler(apiCfg *config.APIConfig) http.HandlerFunc {
 		}
 
 		token, err := services.GenerateJwtToken(user.ID.String())
-		log.Print(err)
 		if err != nil {
 			http.Error(w, "Error Generating Token", http.StatusInternalServerError)
 			return

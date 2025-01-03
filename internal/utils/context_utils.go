@@ -1,12 +1,12 @@
 package utils
 
-import "context"
-
-type contextKey string
-
-const UserContextKey = contextKey("user")
+import (
+	"context"
+	"docsCollab/internal/middlewares"
+)
 
 func GetUserIdFromContext(ctx context.Context) string {
-	user, _ := ctx.Value(UserContextKey).(string)
-	return user
+	id, _ := ctx.Value(middlewares.UserContextKey).(string)
+
+	return id
 }

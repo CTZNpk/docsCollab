@@ -29,3 +29,14 @@ content-type: application/json
   "email": "test12@gmail.com",
   "password": "test123"
 }
+
+###
+# router.Post("/create-doc", handlers.CreateDocumentHandler(&apiCfg))
+POST http://localhost:8000/create-doc
+accept: application/json
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNGU0ZmU2LTY5YzItNDY5NC05ODljLTQ3ZTBkODZkMTE5MSIsImV4cCI6MTczNjAyMTY2MX0.T01dxye_A8eCWfj-GMUuiUsYfzlsR2tx2TQCbifhapw
+
+{
+  "title": "MyFirstDoc"
+}

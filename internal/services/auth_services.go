@@ -1,6 +1,7 @@
 package services
 
 import (
+	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -11,14 +12,14 @@ import (
 var jwtKey = []byte("secretKey")
 
 type Claims struct {
-	Email string `json:"email"`
+	ID string `json:"id"`
 	jwt.RegisteredClaims
 }
 
-func GenerateJwtToken(email string) (string, error) {
+func GenerateJwtToken(id string) (string, error) {
 	expirationTime := time.Now().Add(24 * time.Hour)
 	claims := &Claims{
-		Email: email,
+		ID: id,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(expirationTime),
 		},
@@ -28,6 +29,7 @@ func GenerateJwtToken(email string) (string, error) {
 }
 
 func ValidateToken(tokenStr string) (*Claims, error) {
+	tokenStr = strings.TrimSpace(tokenStr)
 	claims := &Claims{}
 	token, err := jwt.ParseWithClaims(tokenStr, claims, func(token *jwt.Token) (interface{}, error) {
 		return jwtKey, nil
