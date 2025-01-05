@@ -112,3 +112,19 @@ func (q *Queries) GetMyDocuments(ctx context.Context, authorID uuid.UUID) ([]Get
 	}
 	return items, nil
 }
+
+const updateDocumentVersion = `-- name: UpdateDocumentVersion :exec
+UPDATE Documents
+SET current_version = $1
+WHERE id = $2
+`
+
+type UpdateDocumentVersionParams struct {
+	CurrentVersion sql.NullInt32
+	ID             uuid.UUID
+}
+
+func (q *Queries) UpdateDocumentVersion(ctx context.Context, arg UpdateDocumentVersionParams) error {
+	_, err := q.db.ExecContext(ctx, updateDocumentVersion, arg.CurrentVersion, arg.ID)
+	return err
+}

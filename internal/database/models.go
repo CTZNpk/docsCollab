@@ -75,10 +75,11 @@ type Documentcollaborator struct {
 type Operation struct {
 	ID            uuid.UUID
 	OperationType OperationType
-	DocumentID    uuid.NullUUID
-	OperationBy   uuid.NullUUID
+	DocumentID    uuid.UUID
+	OperationBy   uuid.UUID
 	Timestamp     sql.NullTime
 	Position      int32
+	Content       string
 }
 
 type User struct {

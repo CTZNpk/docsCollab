@@ -19,8 +19,8 @@ RETURNING 1
 
 type CreateOperationParams struct {
 	OperationType OperationType
-	DocumentID    uuid.NullUUID
-	OperationBy   uuid.NullUUID
+	DocumentID    uuid.UUID
+	OperationBy   uuid.UUID
 	Position      int32
 }
 

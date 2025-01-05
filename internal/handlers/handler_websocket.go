@@ -1,7 +1,11 @@
 package handlers
 
 import (
+	"database/sql"
+	"docsCollab/internal/config"
+	"docsCollab/internal/database"
 	"docsCollab/internal/realtime"
+	"docsCollab/internal/utils"
 	"log"
 	"net/http"
 
@@ -14,7 +18,7 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
-func WebSocketHandler(hub *realtime.DocumentHub) http.HandlerFunc {
+func WebSocketHandler(hub *realtime.DocumentHub, apiCfg *config.APIConfig) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		conn, err := upgrader.Upgrade(w, r, nil)
 		if err != nil {
@@ -46,8 +50,28 @@ func WebSocketHandler(hub *realtime.DocumentHub) http.HandlerFunc {
 				break
 			}
 
-			message.VectorClock = hub.UpdateVectorClock(documentID, userID)
+			message.CurrentClock, _ = hub.UpdateVectorClock(documentID, userID)
+			_, err := apiCfg.DB.CreateOperation(
+				r.Context(),
+				database.CreateOperationParams{
+					Position:      message.Position,
+					DocumentID:    utils.ConvertToUuid(documentID),
+					OperationBy:   utils.ConvertToUuid(userID),
+					OperationType: database.OperationType(message.OperationType),
+				},
+			)
+			if err != nil {
+				log.Println("Unable to save operation In the Database:", err)
+				break
 
+			}
+			err = apiCfg.DB.UpdateDocumentVersion(
+				r.Context(),
+				database.UpdateDocumentVersionParams{
+					ID:             utils.ConvertToUuid(documentID),
+					CurrentVersion: sql.NullInt32{Int32: message.CurrentClock, Valid: true},
+				},
+			)
 			hub.Broadcast(documentID, message)
 		}
 

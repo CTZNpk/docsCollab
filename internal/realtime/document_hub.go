@@ -7,13 +7,13 @@ import (
 )
 
 type MessagePayload struct {
-	Content       string      `json:"content"`
-	Position      string      `json:"position"`
-	OperationType string      `json:"operation_type"`
-	VectorClock   VectorClock `json:"vector_clock"`
+	Content       string `json:"content"`
+	Position      int32  `json:"position"`
+	OperationType string `json:"operation_type"`
+	CurrentClock  int32  `json:"vector_clock"`
 }
 
-type VectorClock map[string]int
+type VectorClock map[string]int32
 
 type DocumentHub struct {
 	mu           sync.Mutex
@@ -58,7 +58,7 @@ func (hub *DocumentHub) Broadcast(documentID string, message MessagePayload) {
 	for _, conn := range conns {
 		err := conn.WriteJSON(map[string]interface{}{
 			"content":        message.Content,
-			"vector_clock":   message.VectorClock,
+			"vector_clock":   message.CurrentClock,
 			"position":       message.Position,
 			"operation_type": message.OperationType,
 		})
@@ -79,13 +79,13 @@ func (hub *DocumentHub) InitVectorClock(documentID string, userID string) {
 	hub.vectorClocks[documentID][userID] = 0
 }
 
-func (hub *DocumentHub) UpdateVectorClock(documentID string, userID string) VectorClock {
+func (hub *DocumentHub) UpdateVectorClock(documentID string, userID string) (int32, bool) {
 	hub.mu.Lock()
 	defer hub.mu.Unlock()
 
 	if clock, exists := hub.vectorClocks[documentID]; exists {
 		clock[userID]++
-		return clock
+		return clock[userID], false
 	}
-	return nil
+	return 0, true
 }

@@ -5,7 +5,7 @@ CREATE TABLE Documents(
   updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
   title TEXT NOT NULL,
   number_of_collaborators INT NOT NULL DEFAULT 0,
-  current_version INT DEFAULT 1,
+  current_version INT DEFAULT 1 NOT NULL,
   author_id UUID REFERENCES users(id) NOT NULL
 );
 
