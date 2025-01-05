@@ -15,7 +15,7 @@ content-type: application/json
 
 {
   "username": "TestUser",
-  "email": "test12@gmail.com",
+  "email": "test13@gmail.com",
   "password": "test123"
 }
 
@@ -33,12 +33,12 @@ content-type: application/json
 ###
 # router.Post("/create-doc", handlers.CreateDocumentHandler(&apiCfg))
 POST http://localhost:8000/create-doc
-ccept: application/json
+Accept: application/json
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNGU0ZmU2LTY5YzItNDY5NC05ODljLTQ3ZTBkODZkMTE5MSIsImV4cCI6MTczNjE2NzM4OX0.RatKcqYuDmVIwEvotyaDeHJh_MuSXXfRO_1txJeEoCo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRlNGYzMDc1LTJhNTEtNGE0Yy1hOWZiLTVmMDgyOTU1N2EyNCIsImV4cCI6MTczNjE3MjA2Nn0.VskvjQbDphryH7Ze7xTOHIpDaAQkzXeDHDaSup3B88U
 
 {
-  "title": "MyFirstDoc"
+  "title": "MySecondDoc"
 }
 
 ###
@@ -46,14 +46,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNGU0ZmU2L
 GET http://localhost:8000/get-my-docs
 Accept: application/json
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNGU0ZmU2LTY5YzItNDY5NC05ODljLTQ3ZTBkODZkMTE5MSIsImV4cCI6MTczNjE2NzM4OX0.RatKcqYuDmVIwEvotyaDeHJh_MuSXXfRO_1txJeEoCo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRlNGYzMDc1LTJhNTEtNGE0Yy1hOWZiLTVmMDgyOTU1N2EyNCIsImV4cCI6MTczNjE3MjA2Nn0.VskvjQbDphryH7Ze7xTOHIpDaAQkzXeDHDaSup3B88U
 
 ###
 # router.Post("/get-my-collabs", handlers.CreateDocumentHandler(&apiCfg))
 GET http://localhost:8000/get-my-collabs
 Accept: application/json
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNGU0ZmU2LTY5YzItNDY5NC05ODljLTQ3ZTBkODZkMTE5MSIsImV4cCI6MTczNjE2NzM4OX0.RatKcqYuDmVIwEvotyaDeHJh_MuSXXfRO_1txJeEoCo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRlNGYzMDc1LTJhNTEtNGE0Yy1hOWZiLTVmMDgyOTU1N2EyNCIsImV4cCI6MTczNjE3MjA2Nn0.VskvjQbDphryH7Ze7xTOHIpDaAQkzXeDHDaSup3B88U
 
 ###
 # router.Post("/get-document-collabs", handlers.CreateDocumentHandler(&apiCfg))
@@ -62,6 +62,19 @@ Accept: application/json
 content-type: application/json
 
 {
-  "document_id": "228b255f-a557-49cd-bbc0-3e0ed59f21fb"
+  "document_id": "3de3b255-78c4-4762-b9df-d2cf45e404ae"
 }
 
+###
+# router.With(middlewares.AuthMiddleware).Post("/add-collab", handlers.AddDocumentCollaborator(&apiCfg))
+POST http://localhost:8000/add-collab
+Accept: application/json
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRlNGYzMDc1LTJhNTEtNGE0Yy1hOWZiLTVmMDgyOTU1N2EyNCIsImV4cCI6MTczNjE3MjA2Nn0.VskvjQbDphryH7Ze7xTOHIpDaAQkzXeDHDaSup3B88U
+
+{
+  "document_id": "3de3b255-78c4-4762-b9df-d2cf45e404ae",
+  "collaborator_id": "c5227964-8961-4acc-90e7-3788a204ea98"
+}
+
+###

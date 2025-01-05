@@ -12,24 +12,6 @@ import (
 	"github.com/google/uuid"
 )
 
-const addCollaborator = `-- name: AddCollaborator :one
-INSERT INTO DocumentCollaborators(document_id, collaborator_id)
-VALUES ($1, $2)
-RETURNING 1
-`
-
-type AddCollaboratorParams struct {
-	DocumentID     uuid.NullUUID
-	CollaboratorID uuid.NullUUID
-}
-
-func (q *Queries) AddCollaborator(ctx context.Context, arg AddCollaboratorParams) (int32, error) {
-	row := q.db.QueryRowContext(ctx, addCollaborator, arg.DocumentID, arg.CollaboratorID)
-	var column_1 int32
-	err := row.Scan(&column_1)
-	return column_1, err
-}
-
 const createDocument = `-- name: CreateDocument :one
 INSERT INTO Documents(title, author_id)
 VALUES ($1, $2)
@@ -38,7 +20,7 @@ RETURNING id, title, number_of_collaborators, current_version, author_id
 
 type CreateDocumentParams struct {
 	Title    string
-	AuthorID uuid.NullUUID
+	AuthorID uuid.UUID
 }
 
 type CreateDocumentRow struct {
@@ -46,7 +28,7 @@ type CreateDocumentRow struct {
 	Title                 string
 	NumberOfCollaborators int32
 	CurrentVersion        sql.NullInt32
-	AuthorID              uuid.NullUUID
+	AuthorID              uuid.UUID
 }
 
 func (q *Queries) CreateDocument(ctx context.Context, arg CreateDocumentParams) (CreateDocumentRow, error) {
@@ -62,41 +44,6 @@ func (q *Queries) CreateDocument(ctx context.Context, arg CreateDocumentParams) 
 	return i, err
 }
 
-const getDocumentCollaborators = `-- name: GetDocumentCollaborators :many
-SELECT u.id , u.username
-FROM DocumentCollaborators dc
-JOIN Users u ON dc.collaborator_id =  u.id
-WHERE dc.document_id = $1
-`
-
-type GetDocumentCollaboratorsRow struct {
-	ID       uuid.UUID
-	Username string
-}
-
-func (q *Queries) GetDocumentCollaborators(ctx context.Context, documentID uuid.NullUUID) ([]GetDocumentCollaboratorsRow, error) {
-	rows, err := q.db.QueryContext(ctx, getDocumentCollaborators, documentID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []GetDocumentCollaboratorsRow
-	for rows.Next() {
-		var i GetDocumentCollaboratorsRow
-		if err := rows.Scan(&i.ID, &i.Username); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
 const getMyCollaborations = `-- name: GetMyCollaborations :many
 SELECT d.id , d.title
 FROM Documents d
@@ -109,7 +56,7 @@ type GetMyCollaborationsRow struct {
 	Title string
 }
 
-func (q *Queries) GetMyCollaborations(ctx context.Context, collaboratorID uuid.NullUUID) ([]GetMyCollaborationsRow, error) {
+func (q *Queries) GetMyCollaborations(ctx context.Context, collaboratorID uuid.UUID) ([]GetMyCollaborationsRow, error) {
 	rows, err := q.db.QueryContext(ctx, getMyCollaborations, collaboratorID)
 	if err != nil {
 		return nil, err
@@ -143,7 +90,7 @@ type GetMyDocumentsRow struct {
 	Title string
 }
 
-func (q *Queries) GetMyDocuments(ctx context.Context, authorID uuid.NullUUID) ([]GetMyDocumentsRow, error) {
+func (q *Queries) GetMyDocuments(ctx context.Context, authorID uuid.UUID) ([]GetMyDocumentsRow, error) {
 	rows, err := q.db.QueryContext(ctx, getMyDocuments, authorID)
 	if err != nil {
 		return nil, err

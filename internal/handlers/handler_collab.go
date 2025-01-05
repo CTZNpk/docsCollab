@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"docsCollab/internal/config"
+	"docsCollab/internal/database"
 	"docsCollab/internal/utils"
 	"encoding/json"
 	"net/http"
@@ -39,7 +40,7 @@ func GetDocumentCollaborators(apiCfg *config.APIConfig) http.HandlerFunc {
 
 		collaborators, err := apiCfg.DB.GetDocumentCollaborators(r.Context(), utils.ConvertToUuid(params.DocumentId))
 		if err != nil {
-			http.Error(w, "Error Retrieving Document", http.StatusBadRequest)
+			http.Error(w, "Error Retrieving Document", http.StatusInternalServerError)
 			return
 		}
 
@@ -48,6 +49,51 @@ func GetDocumentCollaborators(apiCfg *config.APIConfig) http.HandlerFunc {
 			return
 		}
 		utils.RespondWithJson(w, 200, collaborators)
+
+	}
+}
+func AddDocumentCollaborator(apiCfg *config.APIConfig) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		id := utils.GetUserIdFromContext(r.Context())
+
+		var params struct {
+			DocumentId     string `json:"document_id"`
+			CollaboratorId string `json:"collaborator_id"`
+		}
+
+		if err := json.NewDecoder(r.Body).Decode(&params); err != nil {
+			http.Error(w, "Wrong Input Format", http.StatusBadRequest)
+			return
+		}
+
+		valid, _ := apiCfg.DB.CheckDocumentAuthor(r.Context(),
+			database.CheckDocumentAuthorParams{
+				AuthorID: utils.ConvertToUuid(id),
+				ID:       utils.ConvertToUuid(params.DocumentId),
+			},
+		)
+		if valid != 1 {
+			http.Error(w, "Only Authors Can Add Collaborators", http.StatusBadRequest)
+			return
+
+		}
+		valid, _ = apiCfg.DB.AddCollaborator(r.Context(),
+			database.AddCollaboratorParams{
+				DocumentID:     utils.ConvertToUuid(params.DocumentId),
+				CollaboratorID: utils.ConvertToUuid(params.CollaboratorId),
+			},
+		)
+
+		if valid != 1 {
+			http.Error(w, "Error Adding Collaborator", http.StatusInternalServerError)
+			return
+		}
+
+		utils.RespondWithJson(w, 200, struct {
+			Message string `json:"message"`
+		}{
+			Message: "Successfully Added The Collaborator",
+		})
 
 	}
 }

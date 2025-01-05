@@ -27,5 +27,6 @@ func main() {
 	router.With(middlewares.AuthMiddleware).Get("/get-my-docs", handlers.GetMyDocumentsHandler(&apiCfg))
 	router.With(middlewares.AuthMiddleware).Get("/get-my-collabs", handlers.GetMyCollabDocumentsHandler(&apiCfg))
 	router.Post("/get-document-collabs", handlers.GetDocumentCollaborators(&apiCfg))
+	router.With(middlewares.AuthMiddleware).Post("/add-collab", handlers.AddDocumentCollaborator(&apiCfg))
 	http.ListenAndServe(":8000", router)
 }

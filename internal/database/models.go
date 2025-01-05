@@ -63,13 +63,13 @@ type Document struct {
 	Title                 string
 	NumberOfCollaborators int32
 	CurrentVersion        sql.NullInt32
-	AuthorID              uuid.NullUUID
+	AuthorID              uuid.UUID
 }
 
 type Documentcollaborator struct {
 	ID             uuid.UUID
-	DocumentID     uuid.NullUUID
-	CollaboratorID uuid.NullUUID
+	DocumentID     uuid.UUID
+	CollaboratorID uuid.UUID
 }
 
 type Operation struct {

@@ -4,11 +4,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func ConvertToUuid(id string) uuid.NullUUID {
+func ConvertToUuid(id string) uuid.UUID {
 	uid, _ := uuid.Parse(id)
-	nullUuid := uuid.NullUUID{
-		UUID:  uid,
-		Valid: true,
-	}
-	return nullUuid
+	return uid
 }
