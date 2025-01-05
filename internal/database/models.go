@@ -62,7 +62,7 @@ type Document struct {
 	UpdatedAt             time.Time
 	Title                 string
 	NumberOfCollaborators int32
-	CurrentVersion        sql.NullInt32
+	CurrentVersion        int32
 	AuthorID              uuid.UUID
 }
 

@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"database/sql"
 	"docsCollab/internal/config"
 	"docsCollab/internal/database"
 	"docsCollab/internal/realtime"
@@ -58,6 +57,7 @@ func WebSocketHandler(hub *realtime.DocumentHub, apiCfg *config.APIConfig) http.
 					DocumentID:    utils.ConvertToUuid(documentID),
 					OperationBy:   utils.ConvertToUuid(userID),
 					OperationType: database.OperationType(message.OperationType),
+					Content:       message.Content,
 				},
 			)
 			if err != nil {
@@ -69,7 +69,7 @@ func WebSocketHandler(hub *realtime.DocumentHub, apiCfg *config.APIConfig) http.
 				r.Context(),
 				database.UpdateDocumentVersionParams{
 					ID:             utils.ConvertToUuid(documentID),
-					CurrentVersion: sql.NullInt32{Int32: message.CurrentClock, Valid: true},
+					CurrentVersion: message.CurrentClock,
 				},
 			)
 			hub.Broadcast(documentID, message)

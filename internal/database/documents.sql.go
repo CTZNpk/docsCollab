@@ -7,7 +7,6 @@ package database
 
 import (
 	"context"
-	"database/sql"
 
 	"github.com/google/uuid"
 )
@@ -27,7 +26,7 @@ type CreateDocumentRow struct {
 	ID                    uuid.UUID
 	Title                 string
 	NumberOfCollaborators int32
-	CurrentVersion        sql.NullInt32
+	CurrentVersion        int32
 	AuthorID              uuid.UUID
 }
 
@@ -120,7 +119,7 @@ WHERE id = $2
 `
 
 type UpdateDocumentVersionParams struct {
-	CurrentVersion sql.NullInt32
+	CurrentVersion int32
 	ID             uuid.UUID
 }
 
