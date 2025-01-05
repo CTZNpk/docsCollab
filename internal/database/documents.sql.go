@@ -7,6 +7,7 @@ package database
 
 import (
 	"context"
+	"database/sql"
 
 	"github.com/google/uuid"
 )
@@ -32,7 +33,7 @@ func (q *Queries) AddCollaborator(ctx context.Context, arg AddCollaboratorParams
 const createDocument = `-- name: CreateDocument :one
 INSERT INTO Documents(title, author_id)
 VALUES ($1, $2)
-RETURNING id, title
+RETURNING id, title, number_of_collaborators, current_version, author_id
 `
 
 type CreateDocumentParams struct {
@@ -41,15 +42,59 @@ type CreateDocumentParams struct {
 }
 
 type CreateDocumentRow struct {
-	ID    uuid.UUID
-	Title string
+	ID                    uuid.UUID
+	Title                 string
+	NumberOfCollaborators int32
+	CurrentVersion        sql.NullInt32
+	AuthorID              uuid.NullUUID
 }
 
 func (q *Queries) CreateDocument(ctx context.Context, arg CreateDocumentParams) (CreateDocumentRow, error) {
 	row := q.db.QueryRowContext(ctx, createDocument, arg.Title, arg.AuthorID)
 	var i CreateDocumentRow
-	err := row.Scan(&i.ID, &i.Title)
+	err := row.Scan(
+		&i.ID,
+		&i.Title,
+		&i.NumberOfCollaborators,
+		&i.CurrentVersion,
+		&i.AuthorID,
+	)
 	return i, err
+}
+
+const getDocumentCollaborators = `-- name: GetDocumentCollaborators :many
+SELECT u.id , u.username
+FROM DocumentCollaborators dc
+JOIN Users u ON dc.collaborator_id =  u.id
+WHERE dc.document_id = $1
+`
+
+type GetDocumentCollaboratorsRow struct {
+	ID       uuid.UUID
+	Username string
+}
+
+func (q *Queries) GetDocumentCollaborators(ctx context.Context, documentID uuid.NullUUID) ([]GetDocumentCollaboratorsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getDocumentCollaborators, documentID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetDocumentCollaboratorsRow
+	for rows.Next() {
+		var i GetDocumentCollaboratorsRow
+		if err := rows.Scan(&i.ID, &i.Username); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const getMyCollaborations = `-- name: GetMyCollaborations :many

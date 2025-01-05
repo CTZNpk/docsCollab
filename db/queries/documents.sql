@@ -14,6 +14,13 @@ FROM Documents
 WHERE author_id = $1;
 
 
+-- name: GetDocumentCollaborators :many 
+SELECT u.id , u.username
+FROM DocumentCollaborators dc
+JOIN Users u ON dc.collaborator_id =  u.id
+WHERE dc.document_id = $1;
+
+
 -- name: GetMyCollaborations :many
 SELECT d.id , d.title
 FROM Documents d

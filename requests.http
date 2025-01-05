@@ -33,10 +33,35 @@ content-type: application/json
 ###
 # router.Post("/create-doc", handlers.CreateDocumentHandler(&apiCfg))
 POST http://localhost:8000/create-doc
-accept: application/json
+ccept: application/json
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNGU0ZmU2LTY5YzItNDY5NC05ODljLTQ3ZTBkODZkMTE5MSIsImV4cCI6MTczNjAyMTY2MX0.T01dxye_A8eCWfj-GMUuiUsYfzlsR2tx2TQCbifhapw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNGU0ZmU2LTY5YzItNDY5NC05ODljLTQ3ZTBkODZkMTE5MSIsImV4cCI6MTczNjE2NzM4OX0.RatKcqYuDmVIwEvotyaDeHJh_MuSXXfRO_1txJeEoCo
 
 {
   "title": "MyFirstDoc"
 }
+
+###
+# router.Post("/get-my-docs", handlers.CreateDocumentHandler(&apiCfg))
+GET http://localhost:8000/get-my-docs
+Accept: application/json
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNGU0ZmU2LTY5YzItNDY5NC05ODljLTQ3ZTBkODZkMTE5MSIsImV4cCI6MTczNjE2NzM4OX0.RatKcqYuDmVIwEvotyaDeHJh_MuSXXfRO_1txJeEoCo
+
+###
+# router.Post("/get-my-collabs", handlers.CreateDocumentHandler(&apiCfg))
+GET http://localhost:8000/get-my-collabs
+Accept: application/json
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNGU0ZmU2LTY5YzItNDY5NC05ODljLTQ3ZTBkODZkMTE5MSIsImV4cCI6MTczNjE2NzM4OX0.RatKcqYuDmVIwEvotyaDeHJh_MuSXXfRO_1txJeEoCo
+
+###
+# router.Post("/get-document-collabs", handlers.CreateDocumentHandler(&apiCfg))
+POST http://localhost:8000/get-document-collabs
+Accept: application/json
+content-type: application/json
+
+{
+  "document_id": "228b255f-a557-49cd-bbc0-3e0ed59f21fb"
+}
+
