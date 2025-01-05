@@ -3,4 +3,7 @@ INSERT INTO Operations(operation_type, document_id, operation_by, position, cont
 VALUES ($1, $2, $3, $4, $5)
 RETURNING 1;
 
+-- name: GetDocumentOperations :many
+SELECT * FROM Operations
+WHERE document_id = $1;
 

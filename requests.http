@@ -35,7 +35,7 @@ content-type: application/json
 POST http://localhost:8000/create-doc
 Accept: application/json
 content-type: application/json
-Authorization: BearereyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI2ZDQ4NzM5LWQwODctNDcyYi1hODBiLTdhNzM4YmMzYjZlYyIsImV4cCI6MTczNjE5OTU0N30.KY2k3KkFl-xG6s0xAe87UNJ2-uXf7jRG_mn5uBMlmq8 
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI2ZDQ4NzM5LWQwODctNDcyYi1hODBiLTdhNzM4YmMzYjZlYyIsImV4cCI6MTczNjE5OTU0N30.KY2k3KkFl-xG6s0xAe87UNJ2-uXf7jRG_mn5uBMlmq8 
 
 {
   "title": "MyFirstDoc"
@@ -80,3 +80,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRlNGYzMDc1L
 ###
 #27e7142d-1911-433a-96cd-b6c652482403
 #b6d48739-d087-472b-a80b-7a738bc3b6ec
+#router.Post("/get-document-operations", handlers.GetDocumentOperationsHandler(&apiCfg))
+POST http://localhost:8000/get-document-operations
+Accept: application/json
+content-type: application/json
+
+{
+  "document_id": "27e7142d-1911-433a-96cd-b6c652482403"
+} 
+

@@ -37,3 +37,39 @@ func (q *Queries) CreateOperation(ctx context.Context, arg CreateOperationParams
 	err := row.Scan(&column_1)
 	return column_1, err
 }
+
+const getDocumentOperations = `-- name: GetDocumentOperations :many
+SELECT id, operation_type, document_id, operation_by, timestamp, position, content FROM Operations
+WHERE document_id = $1
+`
+
+func (q *Queries) GetDocumentOperations(ctx context.Context, documentID uuid.UUID) ([]Operation, error) {
+	rows, err := q.db.QueryContext(ctx, getDocumentOperations, documentID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Operation
+	for rows.Next() {
+		var i Operation
+		if err := rows.Scan(
+			&i.ID,
+			&i.OperationType,
+			&i.DocumentID,
+			&i.OperationBy,
+			&i.Timestamp,
+			&i.Position,
+			&i.Content,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
