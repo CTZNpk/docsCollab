@@ -4,6 +4,7 @@ import (
 	"docsCollab/internal/config"
 	"docsCollab/internal/database"
 	"docsCollab/internal/realtime"
+	"docsCollab/internal/services"
 	"docsCollab/internal/utils"
 	"log"
 	"net/http"
@@ -38,7 +39,13 @@ func WebSocketHandler(hub *realtime.DocumentHub, apiCfg *config.APIConfig) http.
 		documentID := payload.DocumentId
 		userID := payload.UserId
 
-		hub.InitVectorClock(documentID, userID)
+		ver, err := apiCfg.DB.GetCurrentDocumentVersion(r.Context(), utils.ConvertToUuid(documentID))
+		if err != nil {
+			http.Error(w, "Error Retrieving Current Document Version", http.StatusInternalServerError)
+			return
+		}
+
+		hub.InitVectorClock(documentID, userID, int(ver))
 		hub.AddConnection(documentID, conn)
 		defer hub.RemoveConnection(documentID, conn)
 
@@ -48,6 +55,7 @@ func WebSocketHandler(hub *realtime.DocumentHub, apiCfg *config.APIConfig) http.
 				log.Println("Error reading message:", err)
 				break
 			}
+			log.Print("WE HERE THASASASA")
 
 			message.CurrentClock, _ = hub.UpdateVectorClock(documentID, userID)
 			_, err := apiCfg.DB.CreateOperation(
@@ -60,11 +68,13 @@ func WebSocketHandler(hub *realtime.DocumentHub, apiCfg *config.APIConfig) http.
 					Content:       message.Content,
 				},
 			)
+
 			if err != nil {
 				log.Println("Unable to save operation In the Database:", err)
 				break
-
 			}
+
+			log.Println("WE SHOULD UPDATE VERSION NOW")
 			err = apiCfg.DB.UpdateDocumentVersion(
 				r.Context(),
 				database.UpdateDocumentVersionParams{
@@ -72,6 +82,10 @@ func WebSocketHandler(hub *realtime.DocumentHub, apiCfg *config.APIConfig) http.
 					CurrentVersion: message.CurrentClock,
 				},
 			)
+
+			log.Print("We HEREH THO")
+			services.UpdateDocumentContent(documentID, message, hub.DocumentsContent[documentID])
+
 			hub.Broadcast(documentID, message)
 		}
 

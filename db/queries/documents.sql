@@ -18,3 +18,8 @@ WHERE dc.collaborator_id = $1;
 UPDATE Documents
 SET current_version = $1
 WHERE id = $2;
+
+-- name: GetCurrentDocumentVersion :one
+SELECT current_version
+FROM Documents
+WHERE id = $1;

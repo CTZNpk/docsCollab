@@ -43,6 +43,19 @@ func (q *Queries) CreateDocument(ctx context.Context, arg CreateDocumentParams) 
 	return i, err
 }
 
+const getCurrentDocumentVersion = `-- name: GetCurrentDocumentVersion :one
+SELECT current_version
+FROM Documents
+WHERE id = $1
+`
+
+func (q *Queries) GetCurrentDocumentVersion(ctx context.Context, id uuid.UUID) (int32, error) {
+	row := q.db.QueryRowContext(ctx, getCurrentDocumentVersion, id)
+	var current_version int32
+	err := row.Scan(&current_version)
+	return current_version, err
+}
+
 const getMyCollaborations = `-- name: GetMyCollaborations :many
 SELECT d.id , d.title
 FROM Documents d
