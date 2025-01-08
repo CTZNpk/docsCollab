@@ -67,9 +67,6 @@ func (hub *DocumentHub) Broadcast(documentID string, message MessagePayload) {
 	hub.mu.Lock()
 	defer hub.mu.Unlock()
 
-	//this should update the documentContent
-	//this should also update document Version in database
-	//this should also add an operation in the database
 	conns := hub.connections[documentID]
 	for _, conn := range conns {
 		err := conn.WriteJSON(map[string]interface{}{
@@ -90,8 +87,9 @@ func (hub *DocumentHub) InitVectorClock(documentID string, userID string, curren
 
 	if _, exists := hub.vectorClocks[documentID]; !exists {
 		hub.vectorClocks[documentID] = VectorClock{}
+		hub.vectorClocks[documentID]["latest"] = int32(currentVersion)
 	}
-	hub.vectorClocks[documentID][userID] = 0
+	hub.vectorClocks[documentID][userID] = int32(currentVersion)
 }
 
 func (hub *DocumentHub) UpdateVectorClock(documentID string, userID string) (int32, bool) {
@@ -99,8 +97,16 @@ func (hub *DocumentHub) UpdateVectorClock(documentID string, userID string) (int
 	defer hub.mu.Unlock()
 
 	if clock, exists := hub.vectorClocks[documentID]; exists {
-		clock[userID]++
+		clock["latest"]++
+		clock[userID] = clock["latest"]
 		return clock[userID], false
 	}
 	return 0, true
+}
+
+func (hub *DocumentHub) GetLatestVectorClock(documentId string) int32 {
+	hub.mu.Lock()
+	defer hub.mu.Unlock()
+
+	return hub.vectorClocks[documentId]["latest"]
 }

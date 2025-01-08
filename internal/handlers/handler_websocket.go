@@ -55,17 +55,29 @@ func WebSocketHandler(hub *realtime.DocumentHub, apiCfg *config.APIConfig) http.
 				log.Println("Error reading message:", err)
 				break
 			}
-			log.Print("WE HERE THASASASA")
+
+			latestClock := hub.GetLatestVectorClock(documentID)
+
+			operations, err := apiCfg.DB.GetDocumentOperationsBetweenVersions(r.Context(),
+				database.GetDocumentOperationsBetweenVersionsParams{
+					DocumentID:        utils.ConvertToUuid(documentID),
+					DocumentVersion:   message.CurrentClock,
+					DocumentVersion_2: latestClock,
+				},
+			)
+
+			services.TransformOperation(latestClock, message.CurrentClock, operations, &message.Position)
 
 			message.CurrentClock, _ = hub.UpdateVectorClock(documentID, userID)
-			_, err := apiCfg.DB.CreateOperation(
+			_, err = apiCfg.DB.CreateOperation(
 				r.Context(),
 				database.CreateOperationParams{
-					Position:      message.Position,
-					DocumentID:    utils.ConvertToUuid(documentID),
-					OperationBy:   utils.ConvertToUuid(userID),
-					OperationType: database.OperationType(message.OperationType),
-					Content:       message.Content,
+					Position:        message.Position,
+					DocumentID:      utils.ConvertToUuid(documentID),
+					OperationBy:     utils.ConvertToUuid(userID),
+					OperationType:   database.OperationType(message.OperationType),
+					Content:         message.Content,
+					DocumentVersion: message.CurrentClock,
 				},
 			)
 
@@ -74,7 +86,7 @@ func WebSocketHandler(hub *realtime.DocumentHub, apiCfg *config.APIConfig) http.
 				break
 			}
 
-			log.Println("WE SHOULD UPDATE VERSION NOW")
+			services.UpdateDocumentContent(documentID, message, hub.DocumentsContent[documentID])
 			err = apiCfg.DB.UpdateDocumentVersion(
 				r.Context(),
 				database.UpdateDocumentVersionParams{
@@ -82,9 +94,6 @@ func WebSocketHandler(hub *realtime.DocumentHub, apiCfg *config.APIConfig) http.
 					CurrentVersion: message.CurrentClock,
 				},
 			)
-
-			log.Print("We HEREH THO")
-			services.UpdateDocumentContent(documentID, message, hub.DocumentsContent[documentID])
 
 			hub.Broadcast(documentID, message)
 		}

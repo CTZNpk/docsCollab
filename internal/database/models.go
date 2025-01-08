@@ -73,13 +73,14 @@ type Documentcollaborator struct {
 }
 
 type Operation struct {
-	ID            uuid.UUID
-	OperationType OperationType
-	DocumentID    uuid.UUID
-	OperationBy   uuid.UUID
-	Timestamp     sql.NullTime
-	Position      int32
-	Content       string
+	ID              uuid.UUID
+	OperationType   OperationType
+	DocumentID      uuid.UUID
+	OperationBy     uuid.UUID
+	Timestamp       sql.NullTime
+	DocumentVersion int32
+	Position        int32
+	Content         string
 }
 
 type User struct {

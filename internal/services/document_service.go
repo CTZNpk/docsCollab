@@ -1,6 +1,7 @@
 package services
 
 import (
+	"docsCollab/internal/database"
 	"docsCollab/internal/realtime"
 	"fmt"
 	"os"
@@ -61,4 +62,13 @@ func updateContent(documentContent *string, content string, position int32) erro
 
 	*documentContent = (*documentContent)[:position] + content + (*documentContent)[position+1:]
 	return nil
+}
+
+func TransformOperation(latestVersion int32, currVersion int32, operations []database.Operation, pos *int32) {
+	for _, op := range operations {
+		if op.Position <= *pos {
+			*pos += int32(len(op.Content))
+		}
+	}
+
 }

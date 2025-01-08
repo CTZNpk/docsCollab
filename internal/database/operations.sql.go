@@ -12,17 +12,18 @@ import (
 )
 
 const createOperation = `-- name: CreateOperation :one
-INSERT INTO Operations(operation_type, document_id, operation_by, position, content)
-VALUES ($1, $2, $3, $4, $5)
+INSERT INTO Operations(operation_type, document_id, operation_by, position, content, document_version)
+VALUES ($1, $2, $3, $4, $5, $6)
 RETURNING 1
 `
 
 type CreateOperationParams struct {
-	OperationType OperationType
-	DocumentID    uuid.UUID
-	OperationBy   uuid.UUID
-	Position      int32
-	Content       string
+	OperationType   OperationType
+	DocumentID      uuid.UUID
+	OperationBy     uuid.UUID
+	Position        int32
+	Content         string
+	DocumentVersion int32
 }
 
 func (q *Queries) CreateOperation(ctx context.Context, arg CreateOperationParams) (int32, error) {
@@ -32,6 +33,7 @@ func (q *Queries) CreateOperation(ctx context.Context, arg CreateOperationParams
 		arg.OperationBy,
 		arg.Position,
 		arg.Content,
+		arg.DocumentVersion,
 	)
 	var column_1 int32
 	err := row.Scan(&column_1)
@@ -39,7 +41,7 @@ func (q *Queries) CreateOperation(ctx context.Context, arg CreateOperationParams
 }
 
 const getDocumentOperations = `-- name: GetDocumentOperations :many
-SELECT id, operation_type, document_id, operation_by, timestamp, position, content FROM Operations
+SELECT id, operation_type, document_id, operation_by, timestamp, document_version, position, content FROM Operations
 WHERE document_id = $1
 `
 
@@ -58,6 +60,53 @@ func (q *Queries) GetDocumentOperations(ctx context.Context, documentID uuid.UUI
 			&i.DocumentID,
 			&i.OperationBy,
 			&i.Timestamp,
+			&i.DocumentVersion,
+			&i.Position,
+			&i.Content,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getDocumentOperationsBetweenVersions = `-- name: GetDocumentOperationsBetweenVersions :many
+SELECT id, operation_type, document_id, operation_by, timestamp, document_version, position, content FROM Operations
+WHERE document_id = $1
+AND document_version > $2 
+AND document_version <= $3
+ORDER BY document_version ASC
+`
+
+type GetDocumentOperationsBetweenVersionsParams struct {
+	DocumentID        uuid.UUID
+	DocumentVersion   int32
+	DocumentVersion_2 int32
+}
+
+func (q *Queries) GetDocumentOperationsBetweenVersions(ctx context.Context, arg GetDocumentOperationsBetweenVersionsParams) ([]Operation, error) {
+	rows, err := q.db.QueryContext(ctx, getDocumentOperationsBetweenVersions, arg.DocumentID, arg.DocumentVersion, arg.DocumentVersion_2)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Operation
+	for rows.Next() {
+		var i Operation
+		if err := rows.Scan(
+			&i.ID,
+			&i.OperationType,
+			&i.DocumentID,
+			&i.OperationBy,
+			&i.Timestamp,
+			&i.DocumentVersion,
 			&i.Position,
 			&i.Content,
 		); err != nil {
