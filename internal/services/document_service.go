@@ -66,8 +66,10 @@ func updateContent(documentContent *string, content string, position int32) erro
 
 func TransformOperation(latestVersion int32, currVersion int32, operations []database.Operation, pos *int32) {
 	for _, op := range operations {
-		if op.Position <= *pos {
+		if op.Position <= *pos && op.OperationType == "INSERT" {
 			*pos += int32(len(op.Content))
+		} else if op.Position <= *pos && op.OperationType == "DELETE" {
+			*pos -= int32(len(op.Content))
 		}
 	}
 

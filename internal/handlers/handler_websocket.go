@@ -65,7 +65,26 @@ func WebSocketHandler(hub *realtime.DocumentHub, apiCfg *config.APIConfig) http.
 					DocumentVersion_2: latestClock,
 				},
 			)
+			skip := false
+			for _, op := range operations {
+				if op.OperationType == database.OperationType(message.OperationType) &&
+					op.Position == message.Position &&
+					op.Content == message.Content &&
+					op.DocumentVersion == message.CurrentClock {
+					skip = true
+					break
+				}
+			}
 
+			if skip {
+				lastOp := operations[len(operations)-1]
+				message.CurrentClock = latestClock
+				message.Content = lastOp.Content
+				message.Position = lastOp.Position
+				message.OperationType = string(lastOp.OperationType)
+				hub.Broadcast(documentID, message)
+				continue
+			}
 			services.TransformOperation(latestClock, message.CurrentClock, operations, &message.Position)
 
 			message.CurrentClock, _ = hub.UpdateVectorClock(documentID, userID)

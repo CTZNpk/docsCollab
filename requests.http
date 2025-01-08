@@ -15,7 +15,7 @@ content-type: application/json
 
 {
   "username": "TestUser",
-  "email": "test13@gmail.com",
+  "email": "test12@gmail.com",
   "password": "test123"
 }
 
@@ -46,8 +46,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI2ZDQ4NzM5L
 GET http://localhost:8000/get-my-docs
 Accept: application/json
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRlNGYzMDc1LTJhNTEtNGE0Yy1hOWZiLTVmMDgyOTU1N2EyNCIsImV4cCI6MTczNjE3MjA2Nn0.VskvjQbDphryH7Ze7xTOHIpDaAQkzXeDHDaSup3B88U
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI2ZDQ4NzM5LWQwODctNDcyYi1hODBiLTdhNzM4YmMzYjZlYyIsImV4cCI6MTczNjQ0NDg1OH0.buB2z2obRgxX4kHs5Am8YJm74ToTOG4lpfjvvJaQusQ
+ 
 ###
 # router.Post("/get-my-collabs", handlers.CreateDocumentHandler(&apiCfg))
 GET http://localhost:8000/get-my-collabs
@@ -78,8 +78,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRlNGYzMDc1L
 }
 
 ###
+#
+#eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI2ZDQ4NzM5LWQwODctNDcyYi1hODBiLTdhNzM4YmMzYjZlYyIsImV4cCI6MTczNjQ0NDg1OH0.buB2z2obRgxX4kHs5Am8YJm74ToTOG4lpfjvvJaQusQ
 #27e7142d-1911-433a-96cd-b6c652482403
 #b6d48739-d087-472b-a80b-7a738bc3b6ec
+#eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmNzVlMDAzLWMwNDAtNDFmOS1iY2E0LWRjMmU4ZmE1YmU0NyIsImV4cCI6MTczNjQ0NDk0Mn0.c0B2SsFwS-YCIQO6tuetMXwq-v1LT29ZgEQRPtuhX2Q
+#5f75e003-c040-41f9-bca4-dc2e8fa5be47
 #router.Post("/get-document-operations", handlers.GetDocumentOperationsHandler(&apiCfg))
 POST http://localhost:8000/get-document-operations
 Accept: application/json
