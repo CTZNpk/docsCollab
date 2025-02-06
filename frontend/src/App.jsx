@@ -1,10 +1,7 @@
-import DocumentEditor from "./components/DocumentEditor"
+import AuthScreen from "./screens/AuthScreen";
 
 function App() {
-
-  return (
-    <DocumentEditor />
-  )
+  return <AuthScreen />;
 }
 
-export default App
+export default App;

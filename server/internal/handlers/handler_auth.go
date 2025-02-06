@@ -6,6 +6,7 @@ import (
 	"docsCollab/internal/services"
 	"docsCollab/internal/utils"
 	"encoding/json"
+	"log"
 	"net/http"
 )
 
@@ -109,6 +110,7 @@ func SignupHandler(apiCfg *config.APIConfig) http.HandlerFunc {
 			},
 		)
 		if err != nil {
+      log.Print(err)
 			http.Error(w, "Error Creating User", http.StatusInternalServerError)
 			return
 		}

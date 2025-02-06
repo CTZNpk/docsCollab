@@ -21,6 +21,7 @@ content-type: application/json
 
 ###
 # router.Post("/login", handlers.LoginHandler(&apiCfg))
+# eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk2YzUwZTc4LWZlYjMtNGE1My1hOTBiLWJjNmU5NThiMGRmMiIsImV4cCI6MTczNjY2Nzg3NX0.xCyMcVXzrvOo-cenNE0mS57m8NsXLOXf3IBykIVpmUk
 POST http://localhost:8000/login
 accept: application/json
 content-type: application/json
