@@ -6,6 +6,8 @@ const useAuth = () => {
   const handleSignIn = async (formData) => {
     try {
       const data = await logIn(formData);
+
+      console.log(data);
       localStorage.setItem("token", data.token);
       setUser({ username: data.username });
     } catch (error) {

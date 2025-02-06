@@ -1,9 +1,14 @@
 import React from "react";
 
-export default function TextInput({ id, placeholder, onChange }) {
+export default function TextInput({
+  id,
+  placeholder,
+  onChange,
+  isPass = false,
+}) {
   return (
     <input
-      type="text"
+      type={isPass ? "password" : "text"}
       id={id}
       name={id}
       className="p-5 rounded-lg bg-gray-200 

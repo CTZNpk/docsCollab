@@ -27,8 +27,8 @@ export default function AuthScreen() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isLogin) {
-      const { username, password } = formData;
-      await handleSignIn({ username, password });
+      const { email, password } = formData;
+      await handleSignIn({ email, password });
     } else {
       const { username, email, password } = formData;
       await handleSignUp({ username, email, password });
@@ -68,6 +68,7 @@ export default function AuthScreen() {
           />
           <TextInput
             id="password"
+            isPass={true}
             placeholder="Enter Password"
             onChange={handleChange}
           />
