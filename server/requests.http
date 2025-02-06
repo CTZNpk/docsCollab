@@ -12,10 +12,11 @@ GET http://localhost:8000/
 POST http://localhost:8000/signup
 accept: application/json
 content-type: application/json
+Origin: http://localhost:3000
 
 {
   "username": "TestUser",
-  "email": "test12@gmail.com",
+  "email": "test13@gmail.com",
   "password": "test123"
 }
 

@@ -11,21 +11,28 @@ export default function Navbar() {
           Docs Collab
         </a>
 
-        <div className="hidden md:flex items-center bg-white rounded-lg p-2">
-          <Search className="text-gray-500" size={20} />
-          <input
-            type="text"
-            placeholder="Search..."
-            className="ml-2 outline-none bg-transparent"
-          />
-        </div>
+        <div className="flex gap-4">
+          <div className="hidden md:flex items-center bg-white rounded-lg p-2">
+            <Search className="text-gray-500" size={20} />
+            <input
+              type="text"
+              placeholder="Search..."
+              className="ml-2 outline-none bg-transparent"
+            />
+          </div>
 
-        <button
-          className="md:hidden text-white"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {isOpen ? <X size={28} /> : <Menu size={28} />}
-        </button>
+          <button
+            className="md:hidden text-white"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            {isOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
+
+          <button className="p-4 bg-blue-800 text-white rounded-full 
+            text-xl hover:bg-blue-600">
+            + Add Doc
+          </button>
+        </div>
       </div>
 
       {isOpen && (

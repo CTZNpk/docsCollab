@@ -1,7 +1,8 @@
-import DocumentEditor from "./components/DocumentEditor";
+import LoginScreen from "./screens/LoginScreen";
+import MainScreen from "./screens/MainScreen";
 
 function App() {
-  return <DocumentEditor />;
+  return <LoginScreen />;
 }
 
 export default App;
