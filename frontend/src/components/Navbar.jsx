@@ -7,10 +7,9 @@ export default function Navbar() {
   return (
     <nav className="bg-blue-900 p-5 shadow-lg">
       <div className="container mx-auto flex justify-between items-center">
-        <a href="#" className="text-white text-xl font-bold">
+        <a href="#" className="text-white text-3xl font-bold">
           Docs Collab
         </a>
-
         <div className="flex gap-4">
           <div className="hidden md:flex items-center bg-white rounded-lg p-2">
             <Search className="text-gray-500" size={20} />
@@ -28,8 +27,10 @@ export default function Navbar() {
             {isOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
 
-          <button className="p-4 bg-blue-800 text-white rounded-full 
-            text-xl hover:bg-blue-600">
+          <button
+            className="p-4 bg-blue-800 text-white rounded-full 
+            text-xl hover:bg-blue-600"
+          >
             + Add Doc
           </button>
         </div>

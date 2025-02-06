@@ -1,8 +1,7 @@
-import LoginScreen from "./screens/LoginScreen";
 import MainScreen from "./screens/MainScreen";
 
 function App() {
-  return <LoginScreen />;
+  return <MainScreen />;
 }
 
 export default App;
