@@ -1,7 +1,7 @@
-import AuthScreen from "./screens/AuthScreen";
+import DocumentEditor from "./components/DocumentEditor";
 
 function App() {
-  return <AuthScreen />;
+  return <DocumentEditor />;
 }
 
 export default App;

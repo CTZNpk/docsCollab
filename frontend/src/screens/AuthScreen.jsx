@@ -1,4 +1,5 @@
 import React from "react";
+import TextInput from "../components/TextInput";
 
 export default function AuthScreen({ isLogin }) {
   return (
@@ -20,37 +21,20 @@ export default function AuthScreen({ isLogin }) {
 
           {!isLogin && (
             <>
-              <h1> UserName </h1>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                className="p-2 rounded-lg"
-              />
+              <TextInput id="username" placeholder="Enter Username" />
             </>
           )}
 
-          <h1> Email </h1>
-          <input
-            type="text"
-            id="email"
-            name="email"
-            className="p-2 rounded-lg"
-          />
+          <TextInput id="email" placeholder="Enter Email" />
 
-          <h1> Password </h1>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            className="p-2 rounded-lg"
-          />
+          <TextInput id="password" placeholder="Enter Password" />
 
           <button
             type="submit"
-            className="bg-blue-500 p-5 rounded-xl mt-[15px]"
+            className="bg-blue-500 hover:bg-blue-700 p-5 rounded-xl 
+            mt-[15px] text-white font-bold"
           >
-            {isLogin ? "Login" : "Sign Up"}
+            {isLogin ? "Login" : "SignUp"}
           </button>
         </form>
       </div>

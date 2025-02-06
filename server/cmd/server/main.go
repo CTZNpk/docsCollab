@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/cors"
 	"github.com/joho/godotenv"
 )
 
@@ -17,6 +18,17 @@ func main() {
 	router := chi.NewRouter()
 
 	router.Use(middlewares.Logger)
+
+	corsOptions := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"*"},
+		ExposedHeaders:   []string{"Content-Type"},
+		AllowCredentials: true,
+		Debug:            true,
+	})
+
+	router.Use(corsOptions.Handler)
 
 	documentHub := realtime.NewDocumentHub()
 

@@ -1,17 +1,17 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-  baseURL: "http://localhost:3000/pocketdoc/",
+  baseURL: "http://localhost:8000/",
   headers: {
-    "accept": "application/json",
-    "content-type": "application/json"
+    accept: "application/json",
+    "content-type": "application/json",
   },
-})
+});
 
 apiClient.interceptors.request.use(
   (config) => {
     if (config.protected) {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -21,6 +21,6 @@ apiClient.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 export default apiClient;
