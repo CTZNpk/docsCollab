@@ -7,7 +7,7 @@ const useAuth = () => {
     try {
       const data = await logIn(formData);
 
-      console.log(data);
+      console.log(data.token);
       localStorage.setItem("token", data.token);
       setUser({ username: data.username });
     } catch (error) {
@@ -30,7 +30,7 @@ const useAuth = () => {
     try {
       localStorage.removeItem("token");
       clearUser();
-    } catch (error) { }
+    } catch (error) {}
   };
 
   return { handleSignIn, handleSignUp, handleLogout };

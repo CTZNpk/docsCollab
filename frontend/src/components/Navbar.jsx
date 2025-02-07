@@ -1,8 +1,15 @@
 import { useState } from "react";
 import { Search, Menu, X } from "lucide-react";
+import useDocs from "../hooks/useDocs";
 
 export default function Navbar({ toggleDrawer }) {
   const [isOpen, setIsOpen] = useState(false);
+  const { createDoc } = useDocs();
+
+  const onAddDoc = () => {
+    const docTitle = window.prompt("Enter Title Of Document:");
+    createDoc(docTitle);
+  };
 
   return (
     <nav className="w-full bg-blue-900 p-5 shadow-lg">
@@ -33,6 +40,7 @@ export default function Navbar({ toggleDrawer }) {
           <button
             className="p-4 bg-blue-800 text-white rounded-full 
             text-xl hover:bg-blue-600"
+            onClick={onAddDoc}
           >
             + Add Doc
           </button>

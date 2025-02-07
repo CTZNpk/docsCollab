@@ -12,6 +12,8 @@ apiClient.interceptors.request.use(
   (config) => {
     if (config.protected) {
       const token = localStorage.getItem("token");
+      console.log("WE ARE LOOKING FOR A TOKEN");
+      console.log(token);
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
