@@ -1,15 +1,18 @@
 import { useState } from "react";
 import { Search, Menu, X } from "lucide-react";
 
-export default function Navbar() {
+export default function Navbar({ toggleDrawer }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="bg-blue-900 p-5 shadow-lg">
+    <nav className="w-full bg-blue-900 p-5 shadow-lg">
       <div className="container mx-auto flex justify-between items-center">
-        <a href="#" className="text-white text-3xl font-bold">
-          Docs Collab
-        </a>
+        <div className="text-white text-3xl font-bold">
+          <button onClick={toggleDrawer} className="mr-4 text-white p-5">
+            ☰
+          </button>
+          <a href="#">Docs Collab</a>
+        </div>
         <div className="flex gap-4">
           <div className="hidden md:flex items-center bg-white rounded-lg p-2">
             <Search className="text-gray-500" size={20} />
