@@ -56,3 +56,18 @@ func GetMyDocumentsHandler(apiCfg *config.APIConfig) http.HandlerFunc {
 		utils.RespondWithJson(w, 200, documents)
 	}
 }
+
+func GetDocumentFromId(apiCfg *config.APIConfig) http.HandlerFunc {
+
+	return func(w http.ResponseWriter, r *http.Request) {
+		var params struct {
+			DocumentId string `json:"document_id"`
+		}
+
+		if err := json.NewDecoder(r.Body).Decode(&params); err != nil {
+			http.Error(w, "Invalid request", http.StatusBadRequest)
+			return
+		}
+
+	}
+}

@@ -19,6 +19,11 @@ UPDATE Documents
 SET current_version = $1
 WHERE id = $2;
 
+-- name: GetDocument :one
+SELECT *
+FROM Documents
+WHERE id = $1;
+
 -- name: GetCurrentDocumentVersion :one
 SELECT current_version
 FROM Documents

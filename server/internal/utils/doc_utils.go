@@ -7,7 +7,8 @@ func SaveDocumentToFile(filePath string) error {
 	if err != nil {
 		return err
 	}
-	file, err := os.Create("storage/documents/"+filePath)
+
+	file, err := os.Create("storage/documents/" + filePath)
 	if err != nil {
 		return err
 	}
