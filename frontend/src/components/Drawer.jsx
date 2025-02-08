@@ -19,7 +19,6 @@ export default function Drawer({ isOpen }) {
   }, []);
 
   const handleClick = (docId) => {
-    console.log(docId)
     getDocFromId(docId);
   }
 
