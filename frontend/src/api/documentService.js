@@ -15,5 +15,5 @@ export const createDocument = async (title) => {
 
 export const getMyDocuments = async () => {
   const response = await apiClient.get("/get-my-docs", { protected: true });
-  return response;
+  return response.data;
 };

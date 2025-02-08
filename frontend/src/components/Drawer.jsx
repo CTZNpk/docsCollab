@@ -1,6 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import useDocs from "../hooks/useDocs";
 
 export default function Drawer({ isOpen }) {
+  const { getDocs } = useDocs();
+
+  const [myDocs, setMyDocs] = useState([]);
+
+  useEffect(() => {
+    async function fetchDocs() {
+      const docs = await getDocs();
+      setMyDocs(docs);
+    }
+    fetchDocs();
+
+    return () => {
+      console.log("Cleanup function running...");
+    };
+  }, []);
+
   return (
     <div
       className={`fixed left-0 h-full w-[300px] bg-blue-100 shadow-xl 
@@ -15,12 +32,16 @@ export default function Drawer({ isOpen }) {
         My Documents
       </div>
       <div className="p-5 text-2xl">
-        <div className="border-b-2 border-blue-900 p-5 "> THIS IS A Doc</div>
-        <div className="border-b-2 border-blue-900 p-5 "> THIS IS A Doc</div>
-        <div className="border-b-2 border-blue-900 p-5 "> THIS IS A Doc</div>
-        <div className="border-b-2 border-blue-900 p-5 "> THIS IS A Doc</div>
-        <div className="border-b-2 border-blue-900 p-5 "> THIS IS A Doc</div>
+        {myDocs &&
+          myDocs.map((item) => {
+            console.log(item);
+            return <DrawerComp title={item.Title} key={item.ID} />;
+          })}
       </div>
     </div>
   );
+}
+
+function DrawerComp({ title }) {
+  return <div className="border-b-2 border-blue-900 p-5 "> {title}</div>;
 }

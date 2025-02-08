@@ -4,9 +4,10 @@ const useDocs = () => {
   const getDocs = async () => {
     try {
       const data = await getMyDocuments();
-      console.log(data);
+      return data;
     } catch (e) {
       console.log(e);
+      return [];
     }
   };
 
