@@ -56,6 +56,27 @@ func (q *Queries) GetCurrentDocumentVersion(ctx context.Context, id uuid.UUID) (
 	return current_version, err
 }
 
+const getDocument = `-- name: GetDocument :one
+SELECT id, created_at, updated_at, title, number_of_collaborators, current_version, author_id
+FROM Documents
+WHERE id = $1
+`
+
+func (q *Queries) GetDocument(ctx context.Context, id uuid.UUID) (Document, error) {
+	row := q.db.QueryRowContext(ctx, getDocument, id)
+	var i Document
+	err := row.Scan(
+		&i.ID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Title,
+		&i.NumberOfCollaborators,
+		&i.CurrentVersion,
+		&i.AuthorID,
+	)
+	return i, err
+}
+
 const getMyCollaborations = `-- name: GetMyCollaborations :many
 SELECT d.id , d.title
 FROM Documents d

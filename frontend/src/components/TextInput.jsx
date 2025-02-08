@@ -11,7 +11,7 @@ export default function TextInput({
       type={isPass ? "password" : "text"}
       id={id}
       name={id}
-      className="p-5 rounded-lg bg-gray-200 
+      className="p-2 md:p-5 rounded-lg bg-gray-200 
             focus:border-blue-500 focus:ring-4 focus:ring-blue-500 outline-none"
       placeholder={placeholder}
       onChange={onChange}

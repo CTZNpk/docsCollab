@@ -20,7 +20,7 @@ export default function Drawer({ isOpen }) {
 
   return (
     <div
-      className={`fixed left-0 h-full w-[300px] bg-blue-100 shadow-xl 
+      className={`fixed left-0 h-full w-[20vw] bg-blue-100 shadow-xl 
         transform transition-transform duration-300 z-50 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}

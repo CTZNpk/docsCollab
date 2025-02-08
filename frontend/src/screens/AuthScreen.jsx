@@ -38,18 +38,18 @@ export default function AuthScreen() {
   return (
     <div
       className="flex flex-col min-h-screen md:flex-row bg-[url('/background.jpeg')]
-      bg-cover bg-center "
+      bg-cover bg-center"
     >
       <div
         className="min-h-screen  text-black 
-        flex items-center justify-center text-5xl p-[100px]"
+        flex items-center justify-center  text-lg md:text-4xl p-5 md:p-[100px]"
       >
         <form
-          className="flex flex-col gap-5 bg-blue-400 bg-opacity-75 
+          className="flex flex-col gap-3 md:gap-5 bg-blue-400 bg-opacity-75 
           rounded-xl p-[50px]"
           onSubmit={handleSubmit}
         >
-          <h1 className="font-bold text-center m-10">
+          <h1 className="font-bold text-center md:m-10">
             {isLogin ? "LOGIN" : "SIGNUP"}
           </h1>
           {!isLogin && (
