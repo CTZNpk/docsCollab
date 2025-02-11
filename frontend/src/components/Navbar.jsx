@@ -12,7 +12,7 @@ export default function Navbar({ toggleDrawer }) {
   };
 
   return (
-    <nav className="w-full bg-blue-900 p-5 shadow-lg">
+    <nav className="w-full bg-blue-900 p-5 shadow-lg fixed z-50">
       <div className="container mx-auto flex justify-between items-center">
         <div className="text-white text-3xl font-bold">
           <button onClick={toggleDrawer} className="mr-4 text-white p-5">

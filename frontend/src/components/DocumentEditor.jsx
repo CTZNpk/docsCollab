@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import useSocket from "../hooks/useSocket";
 import documentStore from "../store/documentStore";
 
 function DocumentEditor() {
@@ -12,8 +11,8 @@ function DocumentEditor() {
     content,
     title,
     setContent,
-    // version,
-    // number_of_collaborators
+    version,
+    number_of_collaborators,
   } = documentStore();
 
   useEffect(() => {
@@ -24,8 +23,6 @@ function DocumentEditor() {
     setContent(content);
     setValue(content);
   };
-
-
 
   // useEffect(() => {
   //   if (!socket) return;
@@ -39,13 +36,24 @@ function DocumentEditor() {
   // }, [socket]);
 
   return (
-    <div className="p-12 h-screen w-screen flex flex-col ">
-      <h1 className="text-center text-6xl p-4 font-bold">{title}</h1>
+    <div className="p-12 h-screen w-screen flex flex-col pt-[102px]">
+      <div className="flex justify-between">
+        <h1 className="text-center text-6xl p-4 font-bold">{title}</h1>
+        <div className="flex flex-col">
+          <h1 className="text-center text-6xl font-bold">
+            Document Version:{version}
+          </h1>
+          <p className="text-2xl">
+            Number of collaborators: {number_of_collaborators}
+          </p>
+          <p className="text-2xl">Current Viewers: </p>
+        </div>
+      </div>
       <ReactQuill
         value={value}
         onChange={handleChange}
         theme="snow"
-        className="flex-1"
+        className="flex-1 mt-5"
       />
     </div>
   );
