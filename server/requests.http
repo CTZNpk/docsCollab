@@ -118,3 +118,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNhNjY2ODVhL
 {
   "document_id": "27e7142d-1911-433a-96cd-b6c652482403"
 } 
+
+###
+# router.With(middlewares.AuthMiddleware).Post("/search-doc", handlers.SearchDocument(&apiCfg))
+POST http://localhost:8000/search-doc
+Accept: application/json
+content-type: application/json
+Authorization: BearereyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZjMjNjZjA5LTQyMDAtNDRmNS04ZWQ3LWZmM2ZmZTQ5MWQxYiIsImV4cCI6MTczOTM4MTE2OX0.DtqzfAPM-IfQx2NtgE-8_xKZj5lKrHZrRx2vUu5_yMY 
+
+{
+  "document_name": "Hai"
+} 

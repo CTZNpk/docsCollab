@@ -28,3 +28,10 @@ WHERE id = $1;
 SELECT current_version
 FROM Documents
 WHERE id = $1;
+
+
+-- name: SearchDocumentByName :many
+SELECT *
+FROM Documents d
+WHERE d.title ILIKE $1|| '%';
+

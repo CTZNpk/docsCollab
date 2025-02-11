@@ -10,7 +10,7 @@ const MainScreen = () => {
     <div>
       <Navbar toggleDrawer={() => setIsDrawerOpen(!isDrawerOpen)} />
       <div className="relative">
-        <Drawer isOpen={isDrawerOpen} />
+        <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen} />
         <DocumentEditor />
       </div>
     </div>

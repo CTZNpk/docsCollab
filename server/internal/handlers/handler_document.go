@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"database/sql"
 	"docsCollab/internal/config"
 	"docsCollab/internal/database"
 	"docsCollab/internal/utils"
@@ -101,6 +102,32 @@ func GetDocumentFromId(apiCfg *config.APIConfig) http.HandlerFunc {
 			AuthorId:              document.AuthorID.String(),
 		}
 		utils.RespondWithJson(w, 200, documentFormat)
+
+	}
+}
+
+func SearchDocument(apiCfg *config.APIConfig) http.HandlerFunc {
+
+	return func(w http.ResponseWriter, r *http.Request) {
+		var params struct {
+			DocumentName string `json:"document_name"`
+		}
+
+		if err := json.NewDecoder(r.Body).Decode(&params); err != nil {
+			http.Error(w, "Invalid request", http.StatusBadRequest)
+			return
+		}
+
+		documents, err := apiCfg.DB.SearchDocumentByName(r.Context(),
+			sql.NullString{String: params.DocumentName, Valid: true},
+		)
+
+		if err != nil {
+			http.Error(w, "Cannot Fetch Document From Database", http.StatusInternalServerError)
+			return
+		}
+
+		utils.RespondWithJson(w, 200, documents)
 
 	}
 }

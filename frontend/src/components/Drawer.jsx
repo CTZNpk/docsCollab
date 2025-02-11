@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useDocs from "../hooks/useDocs";
 
-export default function Drawer({ isOpen }) {
+export default function Drawer({ isOpen, setIsOpen }) {
   const { getDocs, getDocFromId } = useDocs();
 
   const [myDocs, setMyDocs] = useState([]);
@@ -20,11 +20,12 @@ export default function Drawer({ isOpen }) {
 
   const handleClick = (docId) => {
     getDocFromId(docId);
+    setIsOpen(false);
   };
 
   return (
     <div
-      className={`fixed left-0 h-full w-[20vw] bg-blue-100 shadow-xl 
+      className={`fixed left-0 h-full lg:w-[30vw] md:w-[50vw] w-full bg-blue-100 shadow-xl 
         transform transition-transform duration-300 z-50 ${isOpen ? "translate-x-0 " : "-translate-x-full "
         } top-[72px]`}
     >
