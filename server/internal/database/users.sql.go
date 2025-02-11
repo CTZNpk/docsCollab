@@ -7,6 +7,7 @@ package database
 
 import (
 	"context"
+	"database/sql"
 
 	"github.com/google/uuid"
 )
@@ -68,4 +69,40 @@ func (q *Queries) GetUserFromEmail(ctx context.Context, email string) (GetUserFr
 		&i.Password,
 	)
 	return i, err
+}
+
+const searchUserByName = `-- name: SearchUserByName :many
+SELECT id, created_at, updated_at, username, password, email
+FROM users u
+WHERE u.username ILIKE $1|| '%'
+`
+
+func (q *Queries) SearchUserByName(ctx context.Context, dollar_1 sql.NullString) ([]User, error) {
+	rows, err := q.db.QueryContext(ctx, searchUserByName, dollar_1)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []User
+	for rows.Next() {
+		var i User
+		if err := rows.Scan(
+			&i.ID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.Username,
+			&i.Password,
+			&i.Email,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }

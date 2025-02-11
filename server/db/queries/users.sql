@@ -10,3 +10,9 @@ SELECT 1 FROM users WHERE email = $1 LIMIT 1;
 
 -- name: GetUserFromEmail :one
 SELECT id, username, email , password FROM users WHERE email= $1 LIMIT 1;
+
+
+-- name: SearchUserByName :many
+SELECT *
+FROM users u
+WHERE u.username ILIKE $1|| '%';
