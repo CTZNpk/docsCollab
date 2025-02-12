@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Search, UserPlus } from "lucide-react";
+import { searchUserFromBackend } from "../api/userService";
+import { addDocumentCollaborator } from "../api/documentService";
 
 export default function SearchResults({ currentDocId }) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -11,8 +13,9 @@ export default function SearchResults({ currentDocId }) {
   //TODO
   const searchUsers = async (query) => {
     try {
-      const response = await fetch(`/api/users/search?q=${query}`);
-      const data = await response.json();
+      const data = await searchUserFromBackend();
+      console.log(data);
+      if (data == null) return [];
       return data;
     } catch (error) {
       console.error("Error searching users:", error);
@@ -20,20 +23,9 @@ export default function SearchResults({ currentDocId }) {
     }
   };
 
-  //TODO
   const addCollaborator = async (userId) => {
     try {
-      const response = await fetch(
-        `/api/documents/${currentDocId}/collaborators`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ userId }),
-        },
-      );
-      const data = await response.json();
+      const data = await addDocumentCollaborator();
       return data;
     } catch (error) {
       console.error("Error adding collaborator:", error);
@@ -93,18 +85,18 @@ export default function SearchResults({ currentDocId }) {
           <div className="p-2">
             {searchResults.map((user) => (
               <div
-                key={user.id}
+                key={user.ID}
                 className="flex items-center gap-3 p-3 hover:bg-blue-50 rounded-lg cursor-pointer"
                 onClick={() => handleUserSelect(user)}
               >
                 <div className="h-10 w-10 bg-blue-100 rounded-full flex items-center justify-center">
                   <span className="text-blue-600 font-semibold">
-                    {user.name.charAt(0).toUpperCase()}
+                    {user.Username.charAt(0).toUpperCase()}
                   </span>
                 </div>
                 <div>
-                  <div className="font-medium">{user.name}</div>
-                  <div className="text-sm text-gray-500">{user.email}</div>
+                  <div className="font-medium">{user.Username}</div>
+                  <div className="text-sm text-gray-500">{user.Email}</div>
                 </div>
                 <UserPlus className="ml-auto text-blue-500" size={20} />
               </div>

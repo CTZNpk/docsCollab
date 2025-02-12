@@ -19,7 +19,19 @@ export const getMyDocuments = async () => {
 };
 
 export const getDocumentFromId = async (documentId) => {
-
-  const response = await apiClient.post("/get-doc", { document_id: documentId, }, { protected: true, });
+  const response = await apiClient.post(
+    "/get-doc",
+    { document_id: documentId },
+    { protected: true },
+  );
   return response.data;
-}
+};
+
+export const addDocumentCollaborator = async (documentId, userId) => {
+  const response = await apiClient.post(
+    "/add-collab",
+    { document_id: documentId, collaborator_id: userId },
+    { protected: true },
+  );
+  return response.data;
+};
