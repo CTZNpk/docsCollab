@@ -1,37 +1,14 @@
 import { useState } from "react";
 import { Search, UserPlus } from "lucide-react";
-import { searchUserFromBackend } from "../api/userService";
-import { addDocumentCollaborator } from "../api/documentService";
+import useSearch from "../hooks/useSearch";
+import documentStore from "../store/documentStore";
 
-export default function SearchResults({ currentDocId }) {
+export default function SearchResults() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-
-  //TODO
-  const searchUsers = async (query) => {
-    try {
-      const data = await searchUserFromBackend();
-      console.log(data);
-      if (data == null) return [];
-      return data;
-    } catch (error) {
-      console.error("Error searching users:", error);
-      return [];
-    }
-  };
-
-  const addCollaborator = async (userId) => {
-    try {
-      const data = await addDocumentCollaborator();
-      return data;
-    } catch (error) {
-      console.error("Error adding collaborator:", error);
-      throw error;
-    }
-  };
+  const { searchUsers, addCollaborator } = useSearch();
+  const documentId = documentStore((state) => state.documentId);
 
   const handleSearch = async (query) => {
     setSearchQuery(query);
@@ -46,22 +23,13 @@ export default function SearchResults({ currentDocId }) {
     setShowResults(true);
   };
 
-  const handleUserSelect = (user) => {
-    setSelectedUser(user);
-    setShowConfirmDialog(true);
-    setShowResults(false);
-  };
+  const handleUserSelect = async (user) => {
+    const confirmed = window.confirm("Are you sure you want to add this user?");
 
-  const handleConfirmAdd = async () => {
-    try {
-      await addCollaborator(selectedUser.id);
-      // Show success message or update UI
-      setShowConfirmDialog(false);
+    if (confirmed) {
+      await addCollaborator(documentId, user.ID);
+      setShowResults(false);
       setSearchQuery("");
-      setSelectedUser(null);
-    } catch (error) {
-      // Handle error
-      console.error("Error adding collaborator:", error);
     }
   };
 

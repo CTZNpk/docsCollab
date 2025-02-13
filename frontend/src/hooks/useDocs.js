@@ -1,4 +1,8 @@
-import { createDocument, getDocumentFromId, getMyDocuments } from "../api/documentService";
+import {
+  createDocument,
+  getDocumentFromId,
+  getMyDocuments,
+} from "../api/documentService";
 import documentStore from "../store/documentStore";
 
 const useDocs = () => {
@@ -24,13 +28,13 @@ const useDocs = () => {
   const getDocFromId = async (docId) => {
     try {
       const document = await getDocumentFromId(docId);
+      console.log(document);
       const setDocument = documentStore.getState().setDocument;
       setDocument(document);
     } catch (e) {
       console.log(e);
     }
-
-  }
+  };
 
   return { getDocs, createDoc, getDocFromId };
 };
