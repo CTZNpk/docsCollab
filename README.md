@@ -1,15 +1,18 @@
 # Document Collaboration App
 
-A real-time collaborative document editor where multiple users can work together on documents simultaneously. This project is built with a **React** frontend (powered by Vite and styled with TailwindCSS) and a **Go** backend that uses WebSockets for live updates and PostgreSQL for data persistence.
+A real-time collaborative document editor where multiple users can work together on documents simultaneously. This project is built with a **React** frontend (powered by Vite and styled with TailwindCSS) and a **Go** backend that uses WebSockets for live updates and PostgreSQL for data persistence. Using Operation Transformation to manage multiple users on the same document
 
+---
 ## Features
 
 - **Real-time Collaboration:** Multiple users can edit the same document simultaneously using WebSockets.
-- **Operational Transform:** Implemented Operational Tranform for Document Collaboration
-- **Authentication & Authorization:** Secure user login and role-based access control.
+- **Operational Transformation:** Implemented Operational Tranform for Document Collaboration
+- **Authentication & Authorization:** Secure user login.
 - **Responsive Interface:** Modern, responsive design built with React and TailwindCSS.
 - **Modular Architecture:** Clean separation of frontend and backend code.
 - **SQL Migrations:** Database migrations managed via SQL scripts and sqlc for type-safe queries.
+
+---
 
 ## Directory Structure
 
@@ -43,6 +46,8 @@ ctznpk-docscollab/
     └── vendor/           # Vendored third-party dependencies
 
 ```
+
+---
 ## Getting Started
 Prerequisites
 - Node.js (v14+ recommended) – for the frontend
@@ -50,11 +55,13 @@ Prerequisites
 - PostgreSQL – as the database engine
 - Docker (optional) – for containerized deployment
 
+---
+
 ## Setup and Installation
   ## Frontend
   Navigate to the frontend directory:
 ```
-cd ctznpk-docscollab/frontend
+cd docsCollab/frontend
 ```
 
 Install dependencies:
@@ -63,7 +70,7 @@ npm install
 ```
 Run the development server:
 ```
-    npm run dev
+npm run dev
 ```
   Access the app:
     Open your browser and go to http://localhost:3000
@@ -71,7 +78,7 @@ Run the development server:
 ## Backend
   Navigate to the server directory:
 ```
-cd ctznpk-docscollab/server
+cd docsCollab/server
 ```
 Set up Environment Variables:
 
@@ -90,3 +97,5 @@ Start the Go Server:
 go run cmd/server/main.go
 ```
 The backend should now be running (by default on port 8080).
+
+---
