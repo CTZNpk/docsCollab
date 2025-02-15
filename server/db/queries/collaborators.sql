@@ -8,6 +8,12 @@ UPDATE Documents
 SET number_of_collaborators = number_of_collaborators + 1
 WHERE id = $1;
 
+-- name: CheckCollaboratorAlreadyAdded :one
+SELECT 1 FROM documentCollaborators 
+WHERE document_id = $1 
+AND collaborator_id = $2;
+
+
 -- name: CheckDocumentAuthor :one
 SELECT 1 FROM documents WHERE id = $1 AND author_id = $2;
 

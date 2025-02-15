@@ -66,6 +66,11 @@ func AddDocumentCollaborator(apiCfg *config.APIConfig) http.HandlerFunc {
 			return
 		}
 
+		if id == params.CollaboratorId {
+			http.Error(w, "Author Cannot Be Added As A Collaborator", http.StatusBadRequest)
+			return
+		}
+
 		valid, _ := apiCfg.DB.CheckDocumentAuthor(r.Context(),
 			database.CheckDocumentAuthorParams{
 				AuthorID: utils.ConvertToUuid(id),
@@ -75,10 +80,20 @@ func AddDocumentCollaborator(apiCfg *config.APIConfig) http.HandlerFunc {
 		if valid != 1 {
 			http.Error(w, "Only Authors Can Add Collaborators", http.StatusBadRequest)
 			return
-
 		}
 
 		ctx := r.Context()
+		val, _ := apiCfg.DB.CheckCollaboratorAlreadyAdded(ctx,
+			database.CheckCollaboratorAlreadyAddedParams{
+				DocumentID:     utils.ConvertToUuid(params.DocumentId),
+				CollaboratorID: utils.ConvertToUuid(params.CollaboratorId),
+			})
+
+		if val == 1 {
+			http.Error(w, "This user is already added as collaborator", http.StatusBadRequest)
+			return
+		}
+
 		tx, err := apiCfg.DBConn.BeginTx(ctx, nil) // Start a transaction
 		if err != nil {
 			http.Error(w, "Failed to begin transaction", http.StatusInternalServerError)

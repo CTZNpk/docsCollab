@@ -29,6 +29,24 @@ func (q *Queries) AddCollaborator(ctx context.Context, arg AddCollaboratorParams
 	return column_1, err
 }
 
+const checkCollaboratorAlreadyAdded = `-- name: CheckCollaboratorAlreadyAdded :one
+SELECT 1 FROM documentCollaborators 
+WHERE document_id = $1 
+AND collaborator_id = $2
+`
+
+type CheckCollaboratorAlreadyAddedParams struct {
+	DocumentID     uuid.UUID
+	CollaboratorID uuid.UUID
+}
+
+func (q *Queries) CheckCollaboratorAlreadyAdded(ctx context.Context, arg CheckCollaboratorAlreadyAddedParams) (int32, error) {
+	row := q.db.QueryRowContext(ctx, checkCollaboratorAlreadyAdded, arg.DocumentID, arg.CollaboratorID)
+	var column_1 int32
+	err := row.Scan(&column_1)
+	return column_1, err
+}
+
 const checkDocumentAuthor = `-- name: CheckDocumentAuthor :one
 SELECT 1 FROM documents WHERE id = $1 AND author_id = $2
 `
