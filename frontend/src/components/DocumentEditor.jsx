@@ -36,7 +36,7 @@ function DocumentEditor() {
   // }, [socket]);
 
   return (
-    <div className="p-12 h-screen w-screen flex flex-col ">
+    <div className="pt-[92px] p-12 h-screen w-screen flex flex-col ">
       <div className="flex justify-between">
         <h1 className="text-center text-6xl p-4 font-bold">{title}</h1>
         <div className="flex flex-col">
