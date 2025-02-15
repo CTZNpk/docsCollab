@@ -9,7 +9,8 @@ import (
 )
 
 type APIConfig struct {
-	DB *database.Queries
+	DB     *database.Queries
+	DBConn *sql.DB
 }
 
 func SetupDatabase() APIConfig {
@@ -26,7 +27,8 @@ func SetupDatabase() APIConfig {
 
 	db := database.New(conn)
 	apiCfg := APIConfig{
-		DB: db,
+		DB:     db,
+		DBConn: conn,
 	}
 
 	return apiCfg

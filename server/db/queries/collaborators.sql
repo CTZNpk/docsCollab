@@ -1,8 +1,12 @@
-
 -- name: AddCollaborator :one
 INSERT INTO DocumentCollaborators(document_id, collaborator_id)
 VALUES ($1, $2)
 RETURNING 1;
+
+-- name: IncrementNumberOfCollaborators :exec
+UPDATE Documents
+SET number_of_collaborators = number_of_collaborators + 1
+WHERE id = $1;
 
 -- name: CheckDocumentAuthor :one
 SELECT 1 FROM documents WHERE id = $1 AND author_id = $2;

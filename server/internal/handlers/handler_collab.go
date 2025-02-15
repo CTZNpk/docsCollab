@@ -77,7 +77,17 @@ func AddDocumentCollaborator(apiCfg *config.APIConfig) http.HandlerFunc {
 			return
 
 		}
-		valid, _ = apiCfg.DB.AddCollaborator(r.Context(),
+
+		ctx := r.Context()
+		tx, err := apiCfg.DBConn.BeginTx(ctx, nil) // Start a transaction
+		if err != nil {
+			http.Error(w, "Failed to begin transaction", http.StatusInternalServerError)
+			return
+		}
+
+		qtx := apiCfg.DB.WithTx(tx)
+
+		valid, _ = qtx.AddCollaborator(ctx,
 			database.AddCollaboratorParams{
 				DocumentID:     utils.ConvertToUuid(params.DocumentId),
 				CollaboratorID: utils.ConvertToUuid(params.CollaboratorId),
@@ -85,7 +95,25 @@ func AddDocumentCollaborator(apiCfg *config.APIConfig) http.HandlerFunc {
 		)
 
 		if valid != 1 {
+			tx.Rollback()
 			http.Error(w, "Error Adding Collaborator", http.StatusInternalServerError)
+			return
+		}
+
+		err = qtx.IncrementNumberOfCollaborators(ctx,
+			utils.ConvertToUuid(params.DocumentId),
+		)
+		if err != nil {
+			tx.Rollback()
+
+			http.Error(w, "Error Incrementing Number Of Collaborator", http.StatusInternalServerError)
+			return
+		}
+
+		// Commit transaction
+		err = tx.Commit()
+		if err != nil {
+			http.Error(w, "Error Commiting Transaction", http.StatusInternalServerError)
 			return
 		}
 

@@ -79,3 +79,14 @@ func (q *Queries) GetDocumentCollaborators(ctx context.Context, documentID uuid.
 	}
 	return items, nil
 }
+
+const incrementNumberOfCollaborators = `-- name: IncrementNumberOfCollaborators :exec
+UPDATE Documents
+SET number_of_collaborators = number_of_collaborators + 1
+WHERE id = $1
+`
+
+func (q *Queries) IncrementNumberOfCollaborators(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.ExecContext(ctx, incrementNumberOfCollaborators, id)
+	return err
+}
