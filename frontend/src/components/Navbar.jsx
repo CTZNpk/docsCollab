@@ -62,25 +62,7 @@ export default function Navbar({ toggleDrawer }) {
           {/* Right Section */}
           <div className="flex items-center space-x-4">
             <div className="hidden md:flex items-center">
-              <div className="relative">
-                <div className="relative flex items-center">
-                  <input
-                    type="text"
-                    placeholder="Search documents..."
-                    value={searchQuery}
-                    onChange={(e) => handleSearch(e.target.value)}
-                    className="w-64 px-4 py-2 rounded-lg bg-blue-800/50 text-white placeholder-blue-300 
-                      border border-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 
-                      transition-all duration-200"
-                  />
-                  <Search className="absolute right-3 text-blue-300 w-5 h-5" />
-                </div>
-                {showResults && (
-                  <div className="absolute w-full mt-2">
-                    <SearchResults currentDocId={1} />
-                  </div>
-                )}
-              </div>
+              <SearchResults />
             </div>
 
             <button
@@ -109,23 +91,7 @@ export default function Navbar({ toggleDrawer }) {
         {/* Mobile Search */}
         {isOpen && (
           <div className="md:hidden p-4 border-t border-blue-700">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search documents..."
-                value={searchQuery}
-                onChange={(e) => handleSearch(e.target.value)}
-                className="w-full px-4 py-2 rounded-lg bg-blue-800/50 text-white 
-                  placeholder-blue-300 border border-blue-700 focus:outline-none 
-                  focus:ring-2 focus:ring-blue-500"
-              />
-              <Search className="absolute right-3 top-2.5 text-blue-300 w-5 h-5" />
-            </div>
-            {showResults && (
-              <div className="mt-2">
-                <SearchResults currentDocId={1} />
-              </div>
-            )}
+            <SearchResults />
           </div>
         )}
       </div>

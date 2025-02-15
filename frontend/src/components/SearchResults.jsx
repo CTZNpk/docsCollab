@@ -35,16 +35,18 @@ export default function SearchResults() {
 
   return (
     <div className="relative">
-      <div className="flex items-center bg-white rounded-lg p-2 shadow-sm border">
-        <Search className="text-gray-500" size={20} />
+      <div className="relative flex items-center">
         <input
           type="text"
-          placeholder="Search users to collaborate..."
+          placeholder="Search Users..."
           value={searchQuery}
-          onChange={(e) => handleSearch(e.target.value)}
           onFocus={() => setShowResults(true)}
-          className="ml-2 outline-none bg-transparent w-64"
+          onChange={(e) => handleSearch(e.target.value)}
+          className="md:w-64 w-full px-4 py-2 rounded-lg bg-blue-800/50 text-white placeholder-blue-300 
+                      border border-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 
+                      transition-all duration-200"
         />
+        <Search className="absolute right-3 text-blue-300 w-5 h-5" />
       </div>
 
       {/* Search Results Dropdown */}
