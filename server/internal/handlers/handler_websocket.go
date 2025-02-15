@@ -27,17 +27,19 @@ func WebSocketHandler(hub *realtime.DocumentHub, apiCfg *config.APIConfig) http.
 		}
 		defer conn.Close()
 
-		var payload struct {
-			DocumentId string `json:"document_id"`
-			UserId     string `json:"user_id"`
-		}
-		if err := conn.ReadJSON(&payload); err != nil {
-			log.Println("Invalid initial payload:", err)
+		documentID := r.URL.Query().Get("document_id")
+		userToken := r.URL.Query().Get("user_token")
+		if documentID == "" || userToken == "" {
+			http.Error(w, "Missing query parameters", http.StatusBadRequest)
 			return
 		}
 
-		documentID := payload.DocumentId
-		userID := payload.UserId
+		userID, err := services.ExtractIdFromToken(userToken)
+		if err != nil {
+			http.Error(w, "Error Extracting Id From the Token", http.StatusInternalServerError)
+			return
+
+		}
 
 		ver, err := apiCfg.DB.GetCurrentDocumentVersion(r.Context(), utils.ConvertToUuid(documentID))
 		if err != nil {

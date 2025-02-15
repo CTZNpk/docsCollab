@@ -67,6 +67,7 @@ func (hub *DocumentHub) Broadcast(documentID string, message MessagePayload) {
 	hub.mu.Lock()
 	defer hub.mu.Unlock()
 
+	var activeConns []*websocket.Conn
 	conns := hub.connections[documentID]
 	for _, conn := range conns {
 		err := conn.WriteJSON(map[string]interface{}{
@@ -77,8 +78,11 @@ func (hub *DocumentHub) Broadcast(documentID string, message MessagePayload) {
 		})
 		if err != nil {
 			conn.Close()
+			continue // Skip adding it to active connections
 		}
+		activeConns = append(activeConns, conn)
 	}
+	hub.connections[documentID] = activeConns
 }
 
 func (hub *DocumentHub) InitVectorClock(documentID string, userID string, currentVersion int) {

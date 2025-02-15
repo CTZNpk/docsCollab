@@ -3,11 +3,27 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import documentStore from "../store/documentStore";
 import { Users, Eye, History } from "lucide-react";
+import useSocket from "../hooks/useSocket";
+import userStore from "../store/userStore";
 
 function DocumentEditor() {
   const [value, setValue] = useState("");
-  const { content, title, setContent, version, number_of_collaborators } =
-    documentStore();
+  const {
+    content,
+    title,
+    setContent,
+    version,
+    number_of_collaborators,
+    incrementVersion,
+    documentId,
+  } = documentStore();
+
+  const { user } = userStore();
+
+  const { sendMessage } = useSocket({
+    documentId: documentId,
+    userId: user,
+  });
 
   useEffect(() => {
     setValue(content);
@@ -76,13 +92,13 @@ function DocumentEditor() {
             className="min-h-[60vh] bg-white rounded-lg"
             modules={{
               toolbar: [
-                [{ header: [1, 2, 3, false] }],
-                ["bold", "italic", "underline", "strike"],
-                [{ color: [] }, { background: [] }],
-                [{ list: "ordered" }, { list: "bullet" }],
-                [{ align: [] }],
-                ["link", "image"],
-                ["clean"],
+                // [{ header: [1, 2, 3, false] }],
+                // ["bold", "italic", "underline", "strike"],
+                // [{ color: [] }, { background: [] }],
+                // [{ list: "ordered" }, { list: "bullet" }],
+                // [{ align: [] }],
+                // ["link", "image"],
+                // ["clean"],
               ],
             }}
           />
