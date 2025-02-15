@@ -19,7 +19,7 @@ export const getMyDocuments = async () => {
 };
 
 export const getMyCollaborations = async () => {
-  const response = await apiClient.get("/get-my-docs", { protected: true });
+  const response = await apiClient.get("/get-my-collabs", { protected: true });
   return response.data;
 };
 
