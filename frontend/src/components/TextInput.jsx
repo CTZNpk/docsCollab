@@ -5,14 +5,31 @@ export default function TextInput({
   placeholder,
   onChange,
   isPass = false,
+  className = "",
 }) {
   return (
     <input
       type={isPass ? "password" : "text"}
       id={id}
       name={id}
-      className="p-2 md:p-5 rounded-lg bg-gray-200 
-            focus:border-blue-500 focus:ring-4 focus:ring-blue-500 outline-none"
+      className={`
+        w-full
+        px-4
+        py-3
+        text-gray-700
+        bg-white
+        border
+        border-gray-300
+        rounded-lg
+        transition-all
+        duration-200
+        placeholder-gray-400
+        focus:outline-none
+        focus:ring-2
+        focus:ring-blue-500
+        focus:border-transparent
+        ${className}
+      `}
       placeholder={placeholder}
       onChange={onChange}
     />
