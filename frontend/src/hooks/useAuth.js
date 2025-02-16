@@ -7,9 +7,8 @@ const useAuth = () => {
     try {
       const data = await logIn(formData);
 
-      console.log(data.token);
       localStorage.setItem("token", data.token);
-      setUser({ username: data.username });
+      setUser({ username: data.user.username, user_id: data.user.id });
     } catch (error) {
       console.log(error);
     }
@@ -18,9 +17,8 @@ const useAuth = () => {
   const handleSignUp = async (formData) => {
     try {
       const data = await signUp(formData);
-      console.log(data);
       localStorage.setItem("token", data.token);
-      setUser({ username: data.username });
+      setUser({ username: data.user.username, user_id: data.user.id });
     } catch (error) {
       console.log(error);
     }

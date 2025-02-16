@@ -21,6 +21,20 @@ type RespondWithToken struct {
 	User  UserResponse `json:"user"`
 }
 
+func GetUser(apiCfg *config.APIConfig) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		id := utils.GetUserIdFromContext(r.Context())
+
+		user, err := apiCfg.DB.GetUserFromId(r.Context(), utils.ConvertToUuid(id))
+		if err != nil {
+			http.Error(w, "Couldn't Retrieve User From Database", http.StatusInternalServerError)
+			return
+		}
+		utils.RespondWithJson(w, 200, user)
+
+	}
+}
+
 func LoginHandler(apiCfg *config.APIConfig) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
@@ -110,7 +124,7 @@ func SignupHandler(apiCfg *config.APIConfig) http.HandlerFunc {
 			},
 		)
 		if err != nil {
-      log.Print(err)
+			log.Print(err)
 			http.Error(w, "Error Creating User", http.StatusInternalServerError)
 			return
 		}

@@ -11,7 +11,7 @@ const documentStore = create((set) => ({
     set({
       content: document.content,
       title: document.title,
-      version: document.versions,
+      version: document.current_version,
       documentId: document.document_id,
       number_of_collaborators: document.number_of_collaborators,
     }),

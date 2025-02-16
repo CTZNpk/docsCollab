@@ -1,5 +1,6 @@
 import { useEffect, useRef, useCallback } from "react";
 import documentStore from "../store/documentStore";
+import userStore from "../store/userStore";
 
 const SOCKET_URL = "ws://localhost:8000/ws";
 
@@ -7,6 +8,7 @@ const useSocket = ({ documentId, userId }) => {
   const wsRef = useRef(null);
   const pendingOperations = useRef([]);
   const { version, content, setContent, incrementVersion } = documentStore();
+  const { user } = userStore();
 
   const transformOperation = useCallback((operation, remoteOp) => {
     let newPosition = operation.position;
@@ -79,6 +81,7 @@ const useSocket = ({ documentId, userId }) => {
 
       wsRef.current.onmessage = (event) => {
         try {
+          console.log(event);
           const data = JSON.parse(event.data);
           console.log("Received operation:", data);
           handleRemoteOperation(data);
@@ -101,7 +104,7 @@ const useSocket = ({ documentId, userId }) => {
         wsRef.current.close();
       }
     };
-  }, [documentId, userId, handleRemoteOperation]);
+  }, [documentId]);
 
   const sendMessage = useCallback(
     (changeDelta) => {
@@ -114,19 +117,32 @@ const useSocket = ({ documentId, userId }) => {
 
         let operationType = "";
         let operationContent = "";
-        if (changeDelta[0].insert) {
-          operationType = "INSERT";
-          operationContent = changeDelta[0].insert;
+        if (position == 0) {
+          if (changeDelta[0].insert) {
+            operationType = "INSERT";
+            operationContent = changeDelta[0].insert;
+          } else {
+            operationType = "DELETE";
+            operationContent = content[3];
+          }
         } else {
-          operationType = "DELETE";
-          operationContent = changeDelta[0].delete;
+          if (changeDelta[1].insert) {
+            operationType = "INSERT";
+            operationContent = changeDelta[1].insert;
+          } else {
+            operationType = "DELETE";
+            operationContent = content[0 + changeDelta[1].retain];
+          }
         }
+
+        const userId = user.user_id;
 
         const operation = {
           content: operationContent,
           position: position,
           operation_type: operationType,
           vector_clock: version,
+          user_id: userId,
         };
 
         incrementVersion();

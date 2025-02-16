@@ -11,6 +11,9 @@ SELECT 1 FROM users WHERE email = $1 LIMIT 1;
 -- name: GetUserFromEmail :one
 SELECT id, username, email , password FROM users WHERE email= $1 LIMIT 1;
 
+-- name: GetUserFromId :one
+SELECT id, username, email FROM users WHERE id= $1;
+
 
 -- name: SearchUserByName :many
 SELECT *

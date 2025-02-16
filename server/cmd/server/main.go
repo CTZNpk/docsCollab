@@ -38,6 +38,8 @@ func main() {
 	})
 	router.Post("/signup", handlers.SignupHandler(&apiCfg))
 	router.Post("/login", handlers.LoginHandler(&apiCfg))
+
+	router.With(middlewares.AuthMiddleware).Get("/get-user", handlers.GetUser(&apiCfg))
 	router.With(middlewares.AuthMiddleware).Post("/create-doc", handlers.CreateDocumentHandler(&apiCfg))
 	router.With(middlewares.AuthMiddleware).Get("/get-my-docs", handlers.GetMyDocumentsHandler(&apiCfg))
 	router.With(middlewares.AuthMiddleware).Get("/get-my-collabs", handlers.GetMyCollabDocumentsHandler(&apiCfg))

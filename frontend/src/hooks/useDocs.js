@@ -42,6 +42,7 @@ const useDocs = () => {
   const getDocFromId = async (docId) => {
     try {
       const document = await getDocumentFromId(docId);
+      console.log("GETTTING THE DOCCCCCCCCC");
       console.log(document);
       const setDocument = documentStore.getState().setDocument;
       setDocument(document);

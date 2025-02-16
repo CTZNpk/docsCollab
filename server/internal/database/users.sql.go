@@ -71,6 +71,23 @@ func (q *Queries) GetUserFromEmail(ctx context.Context, email string) (GetUserFr
 	return i, err
 }
 
+const getUserFromId = `-- name: GetUserFromId :one
+SELECT id, username, email FROM users WHERE id= $1
+`
+
+type GetUserFromIdRow struct {
+	ID       uuid.UUID
+	Username string
+	Email    string
+}
+
+func (q *Queries) GetUserFromId(ctx context.Context, id uuid.UUID) (GetUserFromIdRow, error) {
+	row := q.db.QueryRowContext(ctx, getUserFromId, id)
+	var i GetUserFromIdRow
+	err := row.Scan(&i.ID, &i.Username, &i.Email)
+	return i, err
+}
+
 const searchUserByName = `-- name: SearchUserByName :many
 SELECT id, created_at, updated_at, username, password, email
 FROM users u
