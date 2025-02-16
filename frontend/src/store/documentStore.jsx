@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 const documentStore = create((set) => ({
   documentId: null,
-  content: "content",
+  content: "",
   title: "My Document",
   version: 0,
   number_of_collaborators: 0,

@@ -10,6 +10,7 @@ import (
 )
 
 type MessagePayload struct {
+	UserId        string `json:"user_id"`
 	Content       string `json:"content"`
 	Position      int32  `json:"position"`
 	OperationType string `json:"operation_type"`
