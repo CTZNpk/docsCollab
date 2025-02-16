@@ -31,6 +31,7 @@ function DocumentEditor() {
 
   const handleChange = (content, delta, source, editor) => {
     setContent(content);
+    sendMessage(content);
     setValue(content);
   };
 

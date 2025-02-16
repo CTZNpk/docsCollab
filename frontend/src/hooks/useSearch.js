@@ -16,9 +16,6 @@ const useSearch = () => {
 
   const addCollaborator = async (documentId, userId) => {
     try {
-      console.log("HAHAHHA");
-      console.log(userId);
-      console.log(documentId);
       const data = await addDocumentCollaborator(documentId, userId);
       return data;
     } catch (error) {
