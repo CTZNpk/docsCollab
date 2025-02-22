@@ -6,21 +6,21 @@ export default function Drawer({ isOpen, setIsOpen }) {
   const { getDocs, getDocFromId, getDocCollabs } = useDocs();
   const [myDocs, setMyDocs] = useState([]);
   const [myCollaborationDocs, setMyCollaborationDocs] = useState([]);
+  const { createDoc } = useDocs();
 
   useEffect(() => {
     async function fetchDocs() {
       const docs = await getDocs();
-      if (docs != myDocs) setMyDocs(docs);
+      setMyDocs(docs);
     }
     async function fetchCollaborations() {
       const docs = await getDocCollabs();
-      console.log("THIS SHOULD BE EMPTY HAHAH");
-      console.log(docs);
-      if (docs != myCollaborationDocs) setMyCollaborationDocs(docs);
+
+      setMyCollaborationDocs(docs);
     }
     fetchDocs();
     fetchCollaborations();
-  }, [myDocs, myCollaborationDocs]);
+  }, [createDoc]);
 
   const handleClick = (docId) => {
     getDocFromId(docId);

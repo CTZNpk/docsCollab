@@ -27,10 +27,8 @@ const useSocket = ({ documentId, setValue, editorRef }) => {
           console.log("Received operation:", data);
 
           if (data.user_id != user.user_id) {
-            console.log("WE ENTERING THIS WHYYYYY");
             setValue(data.content);
             incrementVersion();
-            console.log(editorRef);
             const quill = editorRef.getEditor();
             const cursorPosition = quill.getSelection()?.index || 0;
 
@@ -75,7 +73,7 @@ const useSocket = ({ documentId, setValue, editorRef }) => {
         if (position == 0) {
           if (changeDelta[0].insert) {
             operationType = "INSERT";
-            operationContent = changeDelta[0].insert;
+            operationContent = changeDelta[0].insert;{}
           } else {
             operationType = "DELETE";
             operationContent = content[3];

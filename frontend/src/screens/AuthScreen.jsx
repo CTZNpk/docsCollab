@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Lock, Mail, User } from "lucide-react";
 import TextInput from "../components/TextInput";
 import useAuth from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import userStore from "../store/userStore";
 
 export default function AuthScreen() {
   const { handleSignUp, handleSignIn } = useAuth();
@@ -11,6 +13,14 @@ export default function AuthScreen() {
     email: "",
     password: "",
   });
+  const { user } = userStore();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

@@ -32,8 +32,7 @@ const useDocs = () => {
 
   const createDoc = async (docTitle) => {
     try {
-      const data = await createDocument(docTitle);
-      console.log(data);
+      await createDocument(docTitle);
     } catch (e) {
       console.log(e);
     }
@@ -42,8 +41,6 @@ const useDocs = () => {
   const getDocFromId = async (docId) => {
     try {
       const document = await getDocumentFromId(docId);
-      console.log("GETTTING THE DOCCCCCCCCC");
-      console.log(document);
       const setDocument = documentStore.getState().setDocument;
       setDocument(document);
     } catch (e) {
