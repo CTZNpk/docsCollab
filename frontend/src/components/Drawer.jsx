@@ -10,19 +10,17 @@ export default function Drawer({ isOpen, setIsOpen }) {
   useEffect(() => {
     async function fetchDocs() {
       const docs = await getDocs();
-      console.log("MY DOCS");
-      console.log(docs);
-      setMyDocs(docs);
+      if (docs != myDocs) setMyDocs(docs);
     }
     async function fetchCollaborations() {
       const docs = await getDocCollabs();
       console.log("THIS SHOULD BE EMPTY HAHAH");
       console.log(docs);
-      setMyCollaborationDocs(docs);
+      if (docs != myCollaborationDocs) setMyCollaborationDocs(docs);
     }
     fetchDocs();
     fetchCollaborations();
-  }, []);
+  }, [myDocs, myCollaborationDocs]);
 
   const handleClick = (docId) => {
     getDocFromId(docId);
@@ -32,7 +30,8 @@ export default function Drawer({ isOpen, setIsOpen }) {
   return (
     <div
       className={`fixed left-0 h-full lg:w-[30vw] md:w-[50vw] w-full bg-gradient-to-b from-blue-50 to-white shadow-xl 
-        transform transition-transform duration-300 ease-in-out z-50 ${isOpen ? "translate-x-0" : "-translate-x-full"
+        transform transition-transform duration-300 ease-in-out z-50 ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
         } top-[40px] overflow-y-auto`}
     >
       <div className="flex flex-col h-full">
@@ -96,7 +95,8 @@ function DrawerComp({ title, id, handleClick, isShared }) {
     <div
       onClick={() => handleClick(id)}
       className={`group flex items-center justify-between p-3 rounded-lg cursor-pointer
-        ${isShared ? "bg-white hover:bg-blue-100" : "bg-white hover:bg-blue-100"
+        ${
+          isShared ? "bg-white hover:bg-blue-100" : "bg-white hover:bg-blue-100"
         }
         transition-all duration-200 shadow-sm hover:shadow-md`}
     >

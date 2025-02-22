@@ -45,6 +45,18 @@ function DocumentEditor() {
     },
   };
 
+  if (!documentId) {
+    return (
+      <div className="pt-[72px] min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-50 to-white">
+        <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+          <h2 className="text-2xl font-bold text-gray-800">
+            Create or Select a Document to Continue
+          </h2>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="pt-[72px] min-h-screen bg-gradient-to-b from-blue-50 to-white">
       <div className="max-w-[1400px] mx-auto p-6">

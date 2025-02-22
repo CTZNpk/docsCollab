@@ -12,7 +12,6 @@ const MainScreen = () => {
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem("token");
-
       if (token && user == null) {
         try {
           const data = await getUserFromToken();
@@ -22,19 +21,15 @@ const MainScreen = () => {
         }
       }
     };
-
     fetchUser();
   }, [user]);
 
   return (
     <div>
-      <Navbar toggleDrawer={() => setIsDrawerOpen(!isDrawerOpen)} />
-      <div className="relative">
-        <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen} />
-        <DocumentEditor />
-      </div>
+      <Navbar toggleDrawer={() => setIsDrawerOpen(!isDrawerOpen)} user={user} />
+      <Drawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
+      <DocumentEditor />
     </div>
   );
 };
-
 export default MainScreen;
