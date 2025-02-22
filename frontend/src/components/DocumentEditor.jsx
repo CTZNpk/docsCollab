@@ -21,6 +21,8 @@ function DocumentEditor() {
   const { sendMessage } = useSocket({
     documentId: documentId,
     userId: user,
+    setValue: setValue,
+    editorRef: quillRef.current,
   });
 
   useEffect(() => {

@@ -8,6 +8,7 @@ import (
 	"docsCollab/internal/utils"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/websocket"
 )
@@ -84,7 +85,18 @@ func WebSocketHandler(hub *realtime.DocumentHub, apiCfg *config.APIConfig) http.
 				message.Content = lastOp.Content
 				message.Position = lastOp.Position
 				message.OperationType = string(lastOp.OperationType)
-				hub.Broadcast(documentID, message)
+				content := realtime.SendMessagePayload{}
+				content.UserId = message.UserId
+				content.CurrentClock = message.CurrentClock
+
+				docContent, err := os.ReadFile("storage/documents/" + documentID)
+				if err != nil {
+					http.Error(w, "Error Reading File", http.StatusInternalServerError)
+					return
+				}
+
+				content.Content = string(docContent)
+				hub.Broadcast(documentID, content)
 				continue
 			}
 			services.TransformOperation(latestClock, message.CurrentClock, operations, &message.Position)
@@ -116,7 +128,19 @@ func WebSocketHandler(hub *realtime.DocumentHub, apiCfg *config.APIConfig) http.
 				},
 			)
 
-			hub.Broadcast(documentID, message)
+			content := realtime.SendMessagePayload{}
+			content.UserId = message.UserId
+			content.CurrentClock = message.CurrentClock
+
+			docContent, err := os.ReadFile("storage/documents/" + documentID)
+			if err != nil {
+				http.Error(w, "Error Reading File", http.StatusInternalServerError)
+				return
+			}
+
+			content.Content = string(docContent)
+
+			hub.Broadcast(documentID, content)
 		}
 
 	}

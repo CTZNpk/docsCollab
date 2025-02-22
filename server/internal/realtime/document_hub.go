@@ -17,6 +17,12 @@ type MessagePayload struct {
 	CurrentClock  int32  `json:"vector_clock"`
 }
 
+type SendMessagePayload struct {
+	UserId       string `json:"user_id"`
+	Content      string `json:"content"`
+	CurrentClock int32  `json:"vector_clock"`
+}
+
 type VectorClock map[string]int32
 type DocumentHub struct {
 	mu               sync.Mutex
@@ -64,7 +70,7 @@ func (hub *DocumentHub) RemoveConnection(documentId string, conn *websocket.Conn
 	delete(hub.DocumentsContent, documentId)
 }
 
-func (hub *DocumentHub) Broadcast(documentID string, message MessagePayload) {
+func (hub *DocumentHub) Broadcast(documentID string, message SendMessagePayload) {
 	hub.mu.Lock()
 	defer hub.mu.Unlock()
 
@@ -72,10 +78,9 @@ func (hub *DocumentHub) Broadcast(documentID string, message MessagePayload) {
 	conns := hub.connections[documentID]
 	for _, conn := range conns {
 		err := conn.WriteJSON(map[string]interface{}{
-			"content":        message.Content,
-			"vector_clock":   message.CurrentClock,
-			"position":       message.Position,
-			"operation_type": message.OperationType,
+			"user_id":      message.UserId,
+			"content":      message.Content,
+			"vector_clock": message.CurrentClock,
 		})
 		if err != nil {
 			conn.Close()
