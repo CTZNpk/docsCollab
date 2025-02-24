@@ -1,26 +1,30 @@
 import React, { useEffect, useState } from "react";
 import useDocs from "../hooks/useDocs";
 import { FolderOpen, Users, ChevronRight } from "lucide-react";
+import userStore from "../store/userStore";
 
 export default function Drawer({ isOpen, setIsOpen }) {
-  const { getDocs, getDocFromId, getDocCollabs } = useDocs();
+  const { user } = userStore();
+  const { getDocs, getDocFromId, getDocCollabs, createDoc } = useDocs();
   const [myDocs, setMyDocs] = useState([]);
   const [myCollaborationDocs, setMyCollaborationDocs] = useState([]);
-  const { createDoc } = useDocs();
 
   useEffect(() => {
     async function fetchDocs() {
-      const docs = await getDocs();
-      setMyDocs(docs);
+      if (user) {
+        const docs = await getDocs();
+        setMyDocs(docs);
+      }
     }
     async function fetchCollaborations() {
-      const docs = await getDocCollabs();
-
-      setMyCollaborationDocs(docs);
+      if (user) {
+        const docs = await getDocCollabs();
+        setMyCollaborationDocs(docs);
+      }
     }
     fetchDocs();
     fetchCollaborations();
-  }, [createDoc]);
+  }, [createDoc, user]);
 
   const handleClick = (docId) => {
     getDocFromId(docId);
@@ -30,8 +34,7 @@ export default function Drawer({ isOpen, setIsOpen }) {
   return (
     <div
       className={`fixed left-0 h-full lg:w-[30vw] md:w-[50vw] w-full bg-gradient-to-b from-blue-50 to-white shadow-xl 
-        transform transition-transform duration-300 ease-in-out z-50 ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
+        transform transition-transform duration-300 ease-in-out z-50 ${isOpen ? "translate-x-0" : "-translate-x-full"
         } top-[40px] overflow-y-auto`}
     >
       <div className="flex flex-col h-full">
@@ -95,8 +98,7 @@ function DrawerComp({ title, id, handleClick, isShared }) {
     <div
       onClick={() => handleClick(id)}
       className={`group flex items-center justify-between p-3 rounded-lg cursor-pointer
-        ${
-          isShared ? "bg-white hover:bg-blue-100" : "bg-white hover:bg-blue-100"
+        ${isShared ? "bg-white hover:bg-blue-100" : "bg-white hover:bg-blue-100"
         }
         transition-all duration-200 shadow-sm hover:shadow-md`}
     >

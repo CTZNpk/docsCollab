@@ -20,6 +20,7 @@ const useDocs = () => {
   const getDocCollabs = async () => {
     try {
       const data = await getMyCollaborations();
+
       if (data == null) {
         return [];
       }

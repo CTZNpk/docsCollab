@@ -27,7 +27,11 @@ const MainScreen = () => {
   return (
     <div>
       <Navbar toggleDrawer={() => setIsDrawerOpen(!isDrawerOpen)} user={user} />
-      <Drawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
+      <Drawer
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        setIsOpen={setIsDrawerOpen}
+      />
       <DocumentEditor />
     </div>
   );

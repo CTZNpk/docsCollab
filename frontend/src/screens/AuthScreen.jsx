@@ -43,6 +43,9 @@ export default function AuthScreen() {
       const { username, email, password } = formData;
       await handleSignUp({ username, email, password });
     }
+    if (user) {
+      navigate("/");
+    }
   };
 
   return (
